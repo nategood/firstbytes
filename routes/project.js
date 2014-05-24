@@ -5,8 +5,6 @@
  * Need to add in auth middleware :-)
  */
 var Project = require("../models/project.js");
-console.log("LDKFJLADKJSLFKJSLK");
-console.log(Project);
 
 // GET /project/ID/
 exports.get = function(req, res){
@@ -16,28 +14,25 @@ exports.get = function(req, res){
 
 // PUT /project/ID/
 exports.put = function(req, res){
-    // todo validation, authentication, etc.
-    // var p = new Project({
-    //     "name": req.body["name"],
-    //     "src": req.body["src"],
-    //     "created": new Date()
-    //     // "user_id": todo
-    // });
-    // p.save();
-    // res.send("json", p); // JSON.stringify
+    var p = Project.findOne({ _id: req.params.id });
+    // todo if not p 404
+    p.name = req.body["name"];
+    p.source = req.body["source"];
+    p.save();
+    res.send("json", p);
 };
 
 // POST /project/
 exports.post = function(req, res){
     // todo validation, authentication, etc.
     var p = new Project({
-        "name": req.body["name"],
-        "src": req.body["src"],
-        "created": new Date()
-        // "user_id": todo
+        name: req.body["name"],
+        source: req.body["source"],
+        created: new Date()
+        // userId: todo
     });
     p.save();
-    res.send("json", p); // JSON.stringify
+    res.send("json", p);
 };
 
 // DELETE /project/ID/
