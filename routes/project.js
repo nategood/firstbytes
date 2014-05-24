@@ -14,12 +14,17 @@ exports.get = function(req, res){
 
 // PUT /project/ID/
 exports.put = function(req, res){
-    var p = Project.findOne({ _id: req.params.id });
-    // todo if not p 404
-    p.name = req.body["name"];
-    p.source = req.body["source"];
-    p.save();
-    res.send("json", p);
+    // todo dry flow this up across routers
+    Project.findOne({ _id: req.params.id }, function(err, p) {
+        if (err) req.send(500, {"error": "We got trouble in River City"});
+        if (!p) req.send(404, {"error": "Who?"});
+        // todo validation, etc.
+        p.name = req.body["name"];
+        p.source = req.body["source"];
+        p.save();
+        // todo
+        res.send("json", p);
+    });
 };
 
 // POST /project/
