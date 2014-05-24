@@ -12,15 +12,15 @@ html
   body
     header First Bytes Society
     div#error
-    iframe#sandbox(class="sandbox",src="/canvas",width="500", height="500", scrolling="no")
+    iframe#sandbox(class="sandbox",src="/canvas",width="500",height="500",scrolling="no")
     div#editor(class="editor").
-        // Set up some variables
-        var x = 0, white = 255, black = 0;
-        FB.background(black);
-        FB.fill(white);
+        // Choose a black background
+        FB.background(FB.black);
+        // Pick up a white paint brush
+        FB.fill(FB.white);
+        // Paint a rectangle (with your white brush)
+        FB.rect(100, 50, 200, 300);
 
-        // Animate with frames!
-        FB.draw = function() {
-            FB.rect(x, 10, 100, 200);
-            x = x + 1;
-        };
+        // What's next? Change the numbers above! For example,
+        // make change 100 to 300. Can you you figure out
+        // what the numbers do?

@@ -9,4 +9,11 @@ html
     script(src="/js/fbs.js")
   body
     canvas#canvas(width="500", height="500")
+    script().
+        // todo move this
+        // hack to overload, monkey patch some things into Processing.js
+        // eventually overload all the color methods so they can take
+        // FB.green a single argument as an array
+        Processing.prototype.white = 255;
+        Processing.prototype.black = 0;
     script(src="data:text/javascript,;", id="canvas-script")

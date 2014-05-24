@@ -26,7 +26,7 @@ $(function() {
         // don't require defining draw/setup functions
         // think we always want to require the namespacing for now
         // this may change if we seek interoperability with KA sketches
-        src = 'FB.draw = function() {' + src + ';};';
+        src = 'FB.draw = function() {' + src + '\n;};';
         return buildSrc(src);
     };
     var buildSrc = function(src) {
