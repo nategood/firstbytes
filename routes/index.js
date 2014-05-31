@@ -1,7 +1,7 @@
 
 // GET /
 exports.index = function(req, res){
-  res.render("main", { title: "First Bytes Society: Playground" });
+  res.render("editor", { title: "First Bytes Society: Playground" });
 };
 
 // GET /canvas

@@ -1,20 +1,30 @@
-// user.js
-var mongoose = require("mongoose");
-
 // Models a user of the system (can be a mentor, pupil, etc.
 // everyone is considered a user).
 
+var mongoose = require("../services/db").get(),
+    password = require("../services/util/password"),
+    utils = require("../services/util/model.js");
+
 var schema = mongoose.Schema({
     name: String,
+    hash: String,
+    locale: String,
     joined: Date,
     country: String,      // ISO 2 Char (e.g. US, CA, CH)
     locality: String,     // aka city
     region: String,       // aka state
     postalCode: String    // aka zip
-
-    // social tokens?
 });
 
-var User = mongoose.Model("User", schema);
+schema.methods.checkPassword = function(pass) {
+    return password.check(pass, this.hash);
+};
+
+schema.pre("save", function(next) {
+    if (this.password) this.hash = password.hash(this.password);
+    next();
+});
+
+var User = mongoose.model("User", schema);
 
 exports = User;

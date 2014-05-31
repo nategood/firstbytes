@@ -1,5 +1,5 @@
-// project.js
 var mongoose = require("../services/db.js").get();
+var utils = require("../services/util/model.js");
 
 // Project models a new project that the Coder is working on
 // For now it includes the source code, but this will soon change
@@ -7,13 +7,29 @@ var mongoose = require("../services/db.js").get();
 
 // todo add instance methods (but don't make fat models)
 
-// only inline temporarily, will soon change
 var schema = mongoose.Schema({
     name: String,
-    created: Date,
-    source: String,
-    userId: Number
+    created: {type: Date, default: Date.now},
+    source: String, // latest source kept inline
+    userId: {type: Number},
+    state: Number,
+    privacy: Number
 });
-var Project = mongoose.model('Project', schema);
+
+var Project = mongoose.model("Project", schema);
+
+Project.STATE = {
+    WIP: 1,
+    PUBLISHED: 2,
+    ARCHIVED: 3
+};
+
+Project.PRIVACY = {
+    PUBLIC: 1,
+    PRIVATE: 2
+};
+
+Project.schema.path("state").validate(utils.validate.consts(Project.STATE));
+Project.schema.path("privacy").validate(utils.validate.consts(Project.PRIVACY));
 
 module.exports = Project;

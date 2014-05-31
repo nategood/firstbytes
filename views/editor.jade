@@ -1,0 +1,16 @@
+extends main
+
+block content
+    div#error
+    iframe#sandbox(class="sandbox",src="/canvas",width="500",height="500",scrolling="no")
+    div#editor(class="editor").
+        // Choose a black background
+        FB.background(FB.black);
+        // Pick up a white paint brush
+        FB.fill(FB.white);
+        // Paint a rectangle (with your white brush)
+        FB.rect(100, 50, 200, 300);
+
+        // What's next? Change the numbers above! For example,
+        // make change 100 to 300. Can you you figure out
+        // what the numbers do?
