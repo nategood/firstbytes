@@ -19,6 +19,8 @@ var routes = {
   project: require("../routes/project")
 };
 
+var ERR_MUST_AUTHENTICATE = "You must authenticate";
+
 // app setup
 var app = express();
 
@@ -63,13 +65,17 @@ app.configure("test", function(){
 });
 
 // todo routes that require auth...
+var errorIfNoAuth = function (req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.json(404, {"error": ERR_MUST_AUTHENTICATE});
+};
+
+var redirectIfNoAuth = function (req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+};
 
 // page routes
-app.all("/", function (req, res, next) {
-  console.log(req.isAuthenticated()); next();
-  // if (req.isAuthenticated()) { return next(); }
-  // res.redirect('/login');
-});
 app.get("/", routes.main.index);
 app.get("/canvas/?", routes.main.canvas);
 app.get("/login/", routes.user.pages.login);
@@ -87,15 +93,6 @@ app.put("/user/:id/", routes.user.put);
 app.post("/user/:id/", routes.user.put); // overload
 app.delete("/user/:id/", routes.user.delete);
 
-// var ensureAuth = function (req, res, next) {
-//   console.log(req.isAuthenticated());
-//   next();
-//   // if (req.isAuthenticated()) { return next(); }
-//   // res.redirect('/login');
-// };
-
-db.connect(app.get("data.mongo"));
-
 var listening = false;
 var listen = function() {
   if (listening) return;
@@ -104,14 +101,34 @@ var listen = function() {
   });
   listening = true;
 };
+var connected = false;
+var connect = function() {
+  if (connected === true) return;
+  db.connect(app.get("data.mongo"));
+  connected = true;
+};
+var disconnect = function() {
+  db.disconnect();
+  connected = false;
+};
 
 module.exports = function(conf) {
   // todo use conf to pass in env, other overrides, etc.
   if (conf && conf.autolisten === true) listen();
   return {
     app: app,
+    db: db,
     listen: function() {
+      connect();
       listen();
+    },
+    connect: function() {
+      // connect data connections
+      connect();
+    },
+    disconnect: function() {
+      // disconnect data connections
+      disconnect();
     }
   };
 };

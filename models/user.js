@@ -7,7 +7,8 @@ var mongoose = require("../services/db").get(),
 
 var schema = mongoose.Schema({
     name: String,
-    hash: String,
+    password: String,
+    email: String,
     locale: String,
     joined: Date,
     country: String,      // ISO 2 Char (e.g. US, CA, CH)
@@ -21,10 +22,12 @@ schema.methods.checkPassword = function(pass) {
 };
 
 schema.pre("save", function(next) {
-    if (this.password) this.hash = password.hash(this.password);
+    if (this.isModified('password')) {
+        this.password = password.hash(this.password);
+    }
     next();
 });
 
 var User = mongoose.model("User", schema);
 
-exports = User;
+module.exports = User;
