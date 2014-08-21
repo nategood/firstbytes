@@ -1,53 +1,9 @@
-// todo force test env NODE_ENV=test
-
 var mongo = require("mongodb");
 var server = require("../../services/server")();
-// server.connect(); // need to explicitly connect if we aren't going to server.listen()
+var helper = require("./_helper")(server);
 
-exports.setUp = function(done) {
-    server.connect(); // need to explicitly connect if we aren't going to server.listen()
-    done();
-};
-
-exports.tearDown = function(done) {
-    conditionallyWipeDb(function(err) {
-        server.disconnect();
-        done(err);
-    });
-};
-
-// todo put into model test helper
-var conditionallyWipeDb = function(done) {
-    if (server.app.get("env") !== "test") {
-        console.warn("Environment must be test ", server.app.get("env"));
-        done();
-        return;
-    }
-
-    // have to go native here instead of use mongoose
-    // http://stackoverflow.com/questions/10519432/how-to-do-raw-mongodb-operations-in-mongoose
-    var mongo = require("mongodb").MongoClient;
-
-    mongo.connect(server.app.get("data.mongo"), function(err, db) {
-        var doneAndClose = function(err) {
-            db.close();
-            done(err);
-        };
-        if (err) {
-            console.warn("Unable to drop database - Could not connect");
-            doneAndClose(new Error("Unable to drop database - Could not connect"));
-            return;
-        }
-        db.dropDatabase(function(err) {
-            if (err) {
-                console.warn("Unable to drop database - ", err);
-                doneAndClose(err);
-                return;
-            }
-            doneAndClose();
-        });
-    });
-};
+exports.setUp = helper.setup;
+exports.tearDown = helper.teardown;
 
 var User = require("../../models/user.js");
 
@@ -68,13 +24,3 @@ exports.testCreation = function(test) {
         test.done();
     });
 };
-
-// There is no final teardown method for nodeunit so this test MUST be called at the END
-// of all other tests
-// exports.testCleanup = function(test) {
-//     test.expect();
-//     conditionallyWipeDb(function(err) {
-//         server.disconnect();
-//         test.done();
-//     });
-// };

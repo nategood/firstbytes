@@ -31,8 +31,8 @@ $(function() {
     };
     var buildSrc = function(src) {
         src = 'var FB = new Processing(canvas, function(FB){' +
-            'FB.width = ' + size + ';' +
-            'FB.height = ' + size + ';' +
+            'FB.WIDTH = ' + size + ';' +
+            'FB.HEIGHT = ' + size + ';' +
             src + '\n;' +
         '}); kill = function(){FB.exit();}';
         return duri(src);
