@@ -9,3 +9,13 @@ exports.index = function(req, res){
 exports.canvas = function(req, res){
   res.render("canvas");
 };
+
+// GET /login/
+exports.login = function(req, res) {
+    res.render("login");
+};
+
+// GET /setup/
+exports.setup = function(req, res) {
+    res.render("setup");
+};

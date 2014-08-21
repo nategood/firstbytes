@@ -32,8 +32,8 @@ app.configure(function(){
   app.use(express.favicon("/favicon.ico"));
   app.use(express.logger("dev"));
   app.use(express.bodyParser());
-  app.use(express.cookieParser('2z9sS2c0ks'));
-  app.use(express.session()); //{ path: '/', httpOnly: false, maxAge: null, secret: '2z9sS2c0ks' }
+  app.use(express.cookieParser("2z9sS2c0ks"));
+  app.use(express.session());
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.resolve(__dirname + "/../public")));
@@ -72,13 +72,14 @@ var errorIfNoAuth = function (req, res, next) {
 
 var redirectIfNoAuth = function (req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/login/');
 };
 
 // page routes
 app.get("/", routes.main.index);
 app.get("/canvas/?", routes.main.canvas);
-app.get("/login/", routes.user.pages.login);
+app.get("/login/", routes.main.login);
+app.get("/setup/", routes.main.setup);
 
 // json api routes
 app.get("/project/:id/", routes.project.get);

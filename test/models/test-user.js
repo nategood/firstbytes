@@ -12,15 +12,14 @@ exports.setUp = function(done) {
 exports.tearDown = function(done) {
     conditionallyWipeDb(function(err) {
         server.disconnect();
-        console.log("WUT");
-        done();
+        done(err);
     });
 };
 
 // todo put into model test helper
 var conditionallyWipeDb = function(done) {
     if (server.app.get("env") !== "test") {
-        console.log(server.app.get("env"));
+        console.warn("Environment must be test ", server.app.get("env"));
         done();
         return;
     }
@@ -28,11 +27,12 @@ var conditionallyWipeDb = function(done) {
     // have to go native here instead of use mongoose
     // http://stackoverflow.com/questions/10519432/how-to-do-raw-mongodb-operations-in-mongoose
     var mongo = require("mongodb").MongoClient;
-    doneAndClose = function(err) {
-        mongo.disconnect();
-        done(err);
-    };
+
     mongo.connect(server.app.get("data.mongo"), function(err, db) {
+        var doneAndClose = function(err) {
+            db.close();
+            done(err);
+        };
         if (err) {
             console.warn("Unable to drop database - Could not connect");
             doneAndClose(new Error("Unable to drop database - Could not connect"));

@@ -11,13 +11,12 @@ $(function() {
     // });
 
     editor.getSession().on("changeAnnotation", function(){
-        var ann = editor.getSession().getAnnotations();
-
-        if (ann.length > 0) return; // short circuit on error
-        // for (var key in ann) {
-        //     // if (ann[key].type === "error" ) { // || "warning" || "info" (nothing is okay)
-        //     return;
-        // }
+        var annotations = editor.getSession().getAnnotations();
+        var errors = annotations.filter(function(annotation) {
+            // "error" || "warning" || "info"
+            return (annotation.type === "error");
+        });
+        if (errors.length > 0) return; // short circuit when there are errors
         var win = $("#sandbox").get(0).contentWindow;
         var code = editor.getValue();
         var l = window.location;

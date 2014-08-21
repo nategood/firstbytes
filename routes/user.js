@@ -14,14 +14,14 @@ exports.post = modelRoute.post(User, function(req, res, instance) {
 exports.delete = modelRoute.delete(User);
 
 // GET /user/ID/apps/?page=N&start=M
-// GET /user/ID/apps/public/?page=N&start=M
-// GET /user/ID/apps/private/?page=N&start=M
 exports.apps = function(req, res){
   // res.send("json", {});
 };
+// GET /user/ID/apps/private/?page=N&start=M
 exports.privateapps = function(req, res){
   // res.send("json", {});
 };
+// GET /user/ID/apps/public/?page=N&start=M
 exports.publicapps = function(req, res){
   // res.send("json", {});
 };
@@ -35,13 +35,4 @@ exports.auth = function(req, res){
 // POST /user/login/ (unlike auth, returns a session cookie)
 exports.login = function(req, res) {
     passport.authenticate("local", { successRedirect: "/", failureRedirect: "/login", failureFlash: true });
-};
-
-// Non API endpoints (exports.pages)
-
-// GET /login/
-exports.pages = {
-    login: function(req, res) {
-        res.render("login");
-    }
 };
