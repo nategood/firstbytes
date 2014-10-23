@@ -1,0 +1,12 @@
+#login, #signup, .modal {
+    width: 300px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+}
+#login .error {
+    background: #eee;
+    border: solid 1px #ccc;
+    padding: 10px;
+    display: none;
+}

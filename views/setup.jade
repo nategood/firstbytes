@@ -1,0 +1,8 @@
+extends main
+
+block content
+    h1 Create an Account
+    form(id="setup", method="POST", action="/user/create/")
+        input(name="username", placeholder="Username")
+        input(name="password", placeholder="Password")
+        button(type="submit") Sign In
