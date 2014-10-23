@@ -11,5 +11,14 @@ module.exports = {
                 return vals.indexOf(value) !== -1;
             };
         }
+    },
+    toResponse: function(keys) {
+        return function() {
+            var response = {};
+            for (var i in keys) {
+                response[keys[i]] = this[keys[i]];
+            }
+            return response;
+        };
     }
 };

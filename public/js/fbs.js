@@ -1,5 +1,5 @@
 // todo require.js
-// processing, zepto js
+// requires processing, zepto js
 
 // this is super basic and very naive about user input
 // have a fair amount of clean up to do here, but "working"
@@ -18,7 +18,8 @@ $(function() {
         build = (code.indexOf('FB.draw') === -1) ? buildSrcSimple : buildSrc;
         code = build(msg.data);
         $("#canvas-script").remove();
-        $script = $("<script></script>").attr("id", "canvas-script").attr("src", code);
+        $script = $("<script></script>").attr("id", "canvas-script")
+            .attr("src", code);
         $body.append($script);
     }, false);
 
@@ -31,16 +32,11 @@ $(function() {
     };
     var buildSrc = function(src) {
         src = 'var FB = new Processing(canvas, function(FB){' +
-            'FB.WIDTH = ' + size + ';' +
-            'FB.HEIGHT = ' + size + ';' +
+            '_fb_init(FB, ' + size + ');' +
             src + '\n;' +
         '}); kill = function(){FB.exit();}';
         return duri(src);
     };
-    // var buildSrcKA = function() {
-    // put processing.js properties into global space
-    // to replicate KA?
-    // };
     var duri = function(src) {
         return "data:text/javascript," + encodeURI(src);
     };

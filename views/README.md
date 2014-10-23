@@ -2,7 +2,7 @@
 
 ## Strategic
 
- - Keep stuff out of the views :-)
+ - Keep logic stuff out of the views :-)
 
 ## Tactical
 

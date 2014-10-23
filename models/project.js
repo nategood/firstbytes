@@ -7,27 +7,31 @@ var utils = require('../services/util/model.js');
 
 // todo add instance methods (but don't make fat models)
 
-var schema = mongoose.Schema({
-    name: String,
-    created: {type: Date, default: Date.now},
-    source: String, // latest source kept inline, prefer not to make this an array of embeded revisions (for size reasons)
-    userId: {type: Number},
-    state: Number,
-    privacy: Number
-});
-
-var Project = mongoose.model('Project', schema);
-
-Project.STATE = {
+var STATE = {
     WIP: 1,
     PUBLISHED: 2,
     ARCHIVED: 3
 };
 
-Project.PRIVACY = {
+var PRIVACY = {
     PUBLIC: 1,
     PRIVATE: 2
 };
+
+var schema = mongoose.Schema({
+    name: String,
+    created: {type: Date, default: Date.now},
+    source: String, // latest source kept inline, prefer not to make this an array of embeded revisions (for size reasons)
+    userId: {type: String},
+    state: {type: Number, default: STATE.WIP},
+    privacy: {type: Number, default: PRIVACY.PRIVATE}
+});
+
+schema.methods.toResponse = utils.toResponse(['name', 'source', 'state', 'userId', 'privacy', '_id']);
+
+var Project = mongoose.model('Project', schema);
+Project.STATE = STATE;
+Project.PRIVACY = PRIVACY;
 
 Project.schema.path('state').validate(utils.validate.consts(Project.STATE));
 Project.schema.path('privacy').validate(utils.validate.consts(Project.PRIVACY));

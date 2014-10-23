@@ -2,7 +2,7 @@
     "name": "dev",
     "data": {
         "mongo": {
-            "connection": "mongodb://localhost:9490"
+            "connection": "mongodb://localhost:27017/firstbytes"
         },
         "redis": {
             "port": "9491",

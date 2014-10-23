@@ -1,3 +1,4 @@
+// needs some TLC
 /**
  * Manages a Coder's Projects
  * Creating them, editing them, making revisions, seeing diffs, etc.
@@ -9,10 +10,12 @@
 /**
  * @param {Project|String} project Project or id of a project
  */
-var ProjectManager = function() {};
+var ProjectManager = function(id) {
+    this.id = id;
+};
 
 /**
- * @param {int|Project}
+ * @param {int|Project} project
  * @param {Function} callback (err, Project)
  */
 ProjectManager.prototype.fetch = function(project, callback) {
@@ -24,14 +27,29 @@ ProjectManager.prototype.fetch = function(project, callback) {
 
 /**
  * @param {Project} project
- * @param {int|Object} type save type or object of optional details (source, type, saved)
+ * @param {int}[optional] type explicit save vs. implicit save
+ * @param {Function} callback (err, Project)
+ */
+ProjectManager.prototype.save = function(project, type, callback) {
+    project.save(function(err) {
+        if (err) return callback(err);
+        // todo check if source is dirty http://stackoverflow.com/questions/18192804/mongoose-get-db-value-in-pre-save-hook
+        // todo actually have code revisions backed in git and "Revision" be a reference to the hash
+        if (typeof type === 'function') callback = type;
+        type = (typeof type === 'number') ? type : Revision.TYPE.EXPLICIT;
+        this.saveRevision(project, type, function(err, rev) {
+            callback(err, project);
+        });
+    }.bind(this));
+};
+
+/**
+ * @param {Project} project
+ * @param {int|Object}[optional] type save type or object of optional details (source, type, saved)
  * @param {Function} callback (err, Revision)
  */
 ProjectManager.prototype.saveRevision = function(project, details, callback) {
-    if (typeof details === 'function') {
-        callback = details;
-        details = {};
-    }
+    if (typeof details === 'function') { callback = details; /*details = {};*/ }
     if (typeof details === 'number') details = {type: details};
     if (typeof details !== 'object') details = {};
 
@@ -47,14 +65,14 @@ ProjectManager.prototype.saveRevision = function(project, details, callback) {
 };
 
 /**
- * Gets the last 10 explicit revisions
+ * Gets the last N explicit revisions
  * @todo add options for changing limit and type (implicit vs. explicit)
  *
  * @param Project
  * @param {Function} callback (err, Revision[])
  */
 ProjectManager.prototype.getRevisions = function(project, callback) {
-    Revision.find({projectId: this.id}, callback); // todo add some sort of paging
+    Revision.find({projectId: this.id}, callback); // todo add some sort of paging, sorting and limiting
 };
 
 /**
