@@ -22,51 +22,54 @@ $(function() {
         var l = window.location;
         var origin = l.protocol + '//' + l.host;
         // todo make more generic publish
-        repo.save(code, true); // auto save to local storage
+        // repo.save(code, true); // auto save to local storage
         win.postMessage(code, origin); // todo listen for errors coming back from iframe
 
-        // ko
-        appvm.projectdirty(true);
-        appvm.projectsource(code);
+        // // ko
+        appvm.dirty(true);
+        appvm.project().source(code);
+        // console.log(appvm.project(), appvm.project().source());
+        // appvm.project(new Project({source: code}));
     });
 
     // clean up everything below and move out of here...
     // temp storage hack for now...
-    $('#save').click(function() {
-        // todo move this out of here
-        repo.save(editor.getValue());
-        if (!auth.isAuthenticated()) {
-            // todo cleanup this view* stuff
-            userview.promptAuthentication('Save your progress! Log in or create an account.');
-        } else {
-            var sess = auth.getSession();
-            var project = {
-                userId: sess.id,
-                source: editor.getValue(),
-                name: appvm.projectname()
-            };
-            repo.saveToRemote(project, sess.token, function(err) {
-                if (err) {
-                    appvm.err('Unable to save project.');
-                    return;
-                }
-                appvm.projectdirty(false);
-            });
-        }
-    });
-    $('#revert').click(function() {
-        // recover to the last explicitly saved state
-        if (!localStorage['fb.source']) return;
-        editor.setValue(repo.getLastSaved['fb.source']);
-    });
-    var $flash = $('<div />', {'css': {'position':'absolute', 'top': '0px', 'left': '0px', 'height': '100%', 'width': '100%', 'background':'#fff'}}).hide();
-    $('body').append($flash);
-    $('#screenshot').click(function() {
-        $flash.show();
-        $flash.fadeOut();
-    });
-    if (!!repo.getLastAutoSaved()) {
-        // should move this or better yet get some two way binding going on
-        editor.setValue(repo.getLastAutoSaved());
-    }
+    // $('#save').click(function() {
+    //     // todo move this out of here
+    //     repo.save(editor.getValue());
+    //     if (!auth.isAuthenticated()) {
+    //         // todo cleanup this view* stuff
+    //         userview.promptAuthentication('Save your progress! Log in or create an account.');
+    //     } else {
+    //         var sess = auth.getSession();
+    //         var project = {
+    //             userId: sess.id,
+    //             source: editor.getValue(),
+    //             // name: appvm.projectname()
+    //         };
+    //         repo.saveToRemote(project, sess.token, function(err) {
+    //             if (err) {
+    //                 // appvm.err('Unable to save project.');
+    //                 return;
+    //             }
+    //             // appvm.projectdirty(false);
+    //         });
+    //     }
+    // });
+    // $('#revert').click(function() {
+    //     // recover to the last explicitly saved state
+    //     if (!localStorage['fb.source']) return;
+    //     editor.setValue(repo.getLastSaved['fb.source']);
+    // });
+    // var $flash = $('<div />', {'css': {'position':'absolute', 'top': '0px', 'left': '0px', 'height': '100%', 'width': '100%', 'background':'#fff'}}).hide();
+    // $('body').append($flash);
+    // $('#screenshot').click(function() {
+    //     $flash.show();
+    //     $flash.fadeOut();
+    // });
+
+    // if (!!repo.getLastAutoSaved()) {
+    //     // should move this or better yet get some two way binding going on
+    //     editor.setValue(repo.getLastAutoSaved());
+    // }
 });

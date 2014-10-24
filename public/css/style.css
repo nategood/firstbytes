@@ -54,3 +54,40 @@ nav ul li.button {
   margin: 3px;
   cursor: pointer;
 }
+
+/* Modals */
+.modal {
+    width: 300px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    position: absolute;
+    left: 50%;
+    margin-left: -160px;
+    top: 100px;
+    z-index: 100;
+}
+#overlay {
+  background: #000;
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+}
+
+.message {
+  color: #ccc;
+  padding: 5px;
+  font-family: Helvetica;
+  font-size: 10px;
+}
+
+.error {
+    background: #eee;
+    border: solid 1px #ccc;
+    padding: 10px;
+    display: none;
+}

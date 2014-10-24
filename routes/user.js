@@ -40,7 +40,7 @@ exports.auth = function(req, res) {
   auth.lookup(req.body['email'], req.body['password'], function(err, user) {
       var token;
       if (err) return res.status(400).json({'error': err});
-      // if (user) return res.status(400).send('json', {'error': E_UNKNOWN_USER});
+      if (!user) return res.status(400).send('json', {'error': E_UNKNOWN_USER});
       token = createSession(req, user);
       res.json({"token": token, "user": user.toResponse()});
   });
@@ -52,7 +52,6 @@ exports.create = function(req, res) {
   user = new User(req.body);
   user.save(function(err) {
     if (err) return res.status(400).json({'error': err});
-    console.log(user);
     var token = createSession(req, user);
     res.json({"token": token, "user": user.toResponse()});
   });
