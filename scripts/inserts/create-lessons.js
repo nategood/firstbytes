@@ -4,7 +4,7 @@ server.connect();
 
 var lessons = [
     {
-        name: 'Smiling Face',
+        name: '0. Smiling Face',
         description: 'Create a face using shapes!',
         source:
 "// Welcome to FirstBytes! You are looking at your first source code. \n" +

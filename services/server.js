@@ -60,6 +60,9 @@ if (env === 'testing') {
 
 var RedisStore = connectredis(session);
 var redissession = new RedisStore(app.get('data.redis'));
+redissession.client.on('error', function(err) {
+  console.warn('Unable to connect to redis server.', err);
+});
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.resolve(__dirname + '/../views'));
@@ -101,6 +104,7 @@ app.get('/stage/:id/', routes.main.stage);
 
 app.get('/project/:id/', routes.project.get);
 app.put('/project/:id/', routes.project.update);
+app.delete('/project/:id/', routes.project.delete);
 app.post('/project/', routes.project.create);
 
 app.post('/user/auth/', routes.user.auth);

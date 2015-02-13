@@ -6,6 +6,7 @@
     L = {
         SAVE_ERROR: 'Whoops! Looks like we were not able to save your code. Bummer. Make sure you are online.',
         DATA_ERROR: 'Whoops! Looks like we were not able to save your code. Looks like we had trouble reading your program.',
+        DELETE_ERROR: 'Whoops! Looks like we were not able to delete this project.',
         GET_PROJECTS_ERROR: 'Uh oh. We were not able to fetch your projects. Make sure you are online.'
     };
 
@@ -41,6 +42,27 @@
         } else {
             $.ajax('/project/', conf);
         }
+    };
+
+
+    // @param {string} project_id
+    // @param {string} token
+    // @param {function} callback (string err, object response)
+    repo.delete = function(project_id, token, callback) {
+        var conf = {
+            type: 'delete',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {'token': token},
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.DELETE_ERROR);
+            }
+        };
+
+        $.ajax('/project/' + project_id + '/', conf);
     };
 
     // @param {string} user_id

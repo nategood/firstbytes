@@ -9,21 +9,27 @@ block content
         div.message(data-bind="text: message, visible: message")
         ul
             li
-                input#projectname(placeholder="Project Name", data-bind="value: project() && project().name")
-            li#save-status(data-bind="text: saveStatus") --
+                input#projectname(placeholder="Project Name", data-bind="value: project() && project().name, visible: !project().lesson()")
+            li(data-bind="visible: !!project().lesson()",style="color:#ccc") Lesson:
+            li(data-bind="text: project() && project().name, visible: !!project().lesson()")
             li.button#save(data-bind="click: csave") Save
+            li.button#delete(data-bind="visible: authenticated, click: cdelete") Delete
             //- li.button#revert Revert
-            //- li.button#screenshot Snap a Screenshot
-            li.button#login-button(data-bind="visible: unauthenticated, click: cshowsignin") Sign In
-            li.button#logout-button(data-bind="visible: authenticated, click: csignout") Sign Out
+            li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot") Snap a Picture
             li.button#projects-button(data-bind="visible: authenticated, click: cshowprojects") My Projects
             li.button#lessons-button(data-bind="visible: authenticated, click: cshowlessons") Lessons
             li.button#logout-button(data-bind="visible: authenticated, click: cnewproject") New Project
             li.button#reference-button(data-bind="click: cshowreference") The Manual
+            li#save-status(data-bind="text: saveStatus") --
+
             li(data-bind="text: username")
+            li.button.right#login-button(data-bind="visible: unauthenticated, click: cshowsignin") Sign In
+            li.button.right#logout-button(data-bind="visible: authenticated, click: csignout") Sign Out
     iframe#sandbox(class="sandbox", src="/canvas", width="500", height="500", scrolling="off")
     div#editor(class="editor")
-    div#overlay(data-bind="visible: showmodal, click: chidemodal")
+    div#overlay.overlay(data-bind="visible: showmodal, click: chidemodal")
+    div.overlay(data-bind="visible: showloading")
+    div.overlay-text(data-bind="visible: showloading") Loading...
     div#login.modal(data-bind="visible: showlogin")
         div.error(data-bind="text: err, visible: err")
         h1 Sign In
@@ -37,7 +43,7 @@ block content
             input(name="name", placeholder="Name", autocomplete="off")
             input(name="email", placeholder="Email", autocomplete="off")
             input(name="password", placeholder="Password", autocomplete="off", type="password")
-            button(type="submit") Sign up
+            button(type="submit") Sign Up
     div#projects.modal(data-bind="visible: showprojects")
         h1 Projects
         ul.clickable(data-bind="foreach: projects")
@@ -177,10 +183,11 @@ block content
             <td>How far down to place the text?</td></tr>
             </table>
         p Additional Example: Use "Times" font to write a large greeting in white
-        code.
-            FB.fill(FB.WHITE);
-            FB.textFont('Times', 20);
-            Fb.text('Hello!', 100, 100);
+        code
+            pre.
+                FB.fill(FB.WHITE);
+                FB.textFont('Times', 20);
+                Fb.text('Hello!', 100, 100);
         h2 Colors
         h3 List of Basic Colors
         p Here is a list of named colors that the Editor supports

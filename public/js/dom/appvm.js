@@ -3,13 +3,15 @@
 // requires moment.js, auth.js, repo.js
 (function(g) {
     var L = {
-        LAST_SAVED_AT: "Saved ", // todo interpolation
-        UNSAVED: "Unsaved",
-        DEFAULT_USERNAME_TEXT: "Annonymous",
-        MUST_LOGIN: "You must log in",
-        MUST_LOGIN_SAVE: "To save your progress, you'll need to create an account or log in in with an existing account.",
-        MUST_LOGIN_PROJECTS: "You must log in to view your projects",
-        UNABLE_TO_SAVE: "Unable to be saved"
+        LAST_SAVED_AT: 'Saved ', // todo interpolation
+        UNSAVED: 'Unsaved',
+        DEFAULT_USERNAME_TEXT: 'Annonymous',
+        MUST_LOGIN: 'You must log in',
+        MUST_LOGIN_SAVE: 'To save your progress, you\'ll need to create an account or log in in with an existing account.',
+        MUST_LOGIN_PROJECTS: 'You must log in to view your projects',
+        CANNOT_DELETE: 'Cannot delete this project',
+        PROJECT_DELETED: 'Project deleted',
+        UNABLE_TO_SAVE: 'Unable to be saved'
     };
 
     // Observable Objects
@@ -38,7 +40,7 @@
 
     // ViewModel
     function AppViewModel() {
-        var initSession, modals, self, populateKnockout;
+        var initSession, clearState, clearProjectState, modals, self, populateKnockout;
 
         self = this;
 
@@ -58,6 +60,8 @@
         self.message = ko.observable(null);
         self.saveStatus = ko.observable('');
         self.lastSaved = ko.observable(null);
+
+        self.showloading = ko.observable(true);
 
         self.authenticated = ko.computed(function() { return !!self.session(); }, this);
         self.unauthenticated = ko.computed(function() { return !self.session(); }, this);
@@ -98,6 +102,9 @@
             self.session(null);
             self.user(null);
             self.projects([]);
+            clearProjectState();
+        };
+        clearProjectState = function() {
             self.project(new Project({}));
             self.message(null);
             self.err(null);
@@ -135,7 +142,11 @@
         };
         self.cnewproject = function() {
             // todo warn if there are unsaved changes on the current project
-            self.project(new Project({}));
+            clearProjectState();
+        };
+        self.cscreenshot = function() {
+            var stageCanvas = stage('#sandbox'); // blah coupling :-(
+            stageCanvas.publishScreenshotIntent();
         };
         self.cshowprojects = function() {
             if (!self.authenticated()) {
@@ -144,6 +155,7 @@
             }
             // fire off a request async - ideally have a loading state
             repo.fetchAll(self.user()._id(), self.session().token(), function(err, projects) {
+                // force attributes
                 self.projects(projects);
             });
             self.showprojects(true);
@@ -171,6 +183,22 @@
         self.cshowreference = function() {
             self.showreference(true);
         };
+        self.cdelete = function() {
+            // todo launch a confirm box prior to delete
+            if (!self.authenticated || !self.project() ||
+                !self.project()._id() || !self.session() || !self.session().token()) {
+                self.err(L.CANNOT_DELETE);
+                return;
+            }
+            repo.delete(self.project()._id(), self.session().token(), function(err, response) {
+                if (err) {
+                    self.err(L.CANNOT_DELETE);
+                    return;
+                }
+                self.message(L.PROJECT_DELETED);
+                clearProjectState();
+            });
+        };
         self.csave = function() {
             if (self.authenticated()) {
                 // todo show some sort of saving network indicator
@@ -197,6 +225,9 @@
     // Main View Model
     g.appvm = new AppViewModel();
     ko.applyBindings(g.appvm);
+    $(function() {
+        g.appvm.showloading(false);
+    });
 
     // update save status (and potentially other things) on a regular basis
     setInterval(function() {

@@ -26,7 +26,8 @@ $(function() {
             return; // short circuit when there are errors
         }
 
-        stageCanvas.publish(code);
+        code = Code().prep(code);
+        stageCanvas.publishCode(code);
     });
 
     appvm.projectObserver = ko.computed(function() {

@@ -64,7 +64,7 @@ exports.getAndAssetUserFromRequest = function(req, userId, callback) {
     var token = req.get("token");
     if (!token) return callback(L.INVALID_TOKEN);
     if (userId === false) userId = req.session[token];
-    if (req.session[token] !== userId) return callback(L.INVALID_TOKEN);
+    if (!req.session || req.session[token] !== userId) return callback(L.INVALID_TOKEN);
     User.findOne({"_id": userId + ""}).exec(function(err, user) { // force strings on queries
         if (err) return callback(err);
         if (!user) return callback(L.ERR_UNKNOWN_USER);

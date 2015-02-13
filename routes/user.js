@@ -16,7 +16,7 @@ exports.projects = function(req, res) {
   // res.send("json", {});
   auth.getAndAssetUserFromRequest(req, req.params.id, function(err, user) {
     if (err) return res.status(401).json({'error': err});
-    Project.find({}, function(err, projects) {
+    Project.find({userId: user._id}, function(err, projects) {
       if (err) return res.status(401).json({'error': err});
       res.json(projects.map(function(p) { return p.toResponse(); } ));
     });

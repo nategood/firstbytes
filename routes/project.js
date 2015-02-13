@@ -12,6 +12,8 @@ var auth = require("../services/auth/user-auth.js");
 var L = {
     COULD_NOT_AUTH: 'Could not authenticate user',
     COULD_NOT_SAVE_PROJECT: 'Could not save project',
+    PROJECT_DOES_NOT_EXSIST: 'Project does not exist',
+    UNABLE_TO_DELETE: 'Unable to delete project',
     NOT_YOUR_PROJECT: 'Attempted to update a project that did not belong to the user'
 };
 
@@ -45,6 +47,22 @@ exports.update = function(req, res) {
             project.save(function(err) {
                 if (err) return res.status(400).json({error: L.COULD_NOT_SAVE_PROJECT});
                 res.json(project.toResponse());
+            });
+        });
+    });
+};
+
+// DELETE /project/ID/
+exports.delete = function(req, res) {
+    auth.getUserFromRequest(req, function(err, user) {
+        if (err || !user) return res.status(400).json({error: L.COULD_NOT_AUTH});
+        Project.findById(req.params.id, function(err, project) {
+            if (err) return res.status(400).json({error: L.PROJECT_DOES_NOT_EXSIST});
+            console.log(project,project.userId.toString(), user._id.toString());
+            if (project.userId.toString() !== user._id.toString()) return res.status(400).json({error: L.NOT_YOUR_PROJECT});
+            Project.remove({_id: project._id}, function(err) {
+                if (err) return res.status(400).json({error: L.UNABLE_TO_DELETE});
+                res.json(project);
             });
         });
     });

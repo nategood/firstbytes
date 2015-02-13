@@ -4,7 +4,7 @@ html, body {
 }
 body {
   /*padding: 50px;*/
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px Helvetica, Arial, sans-serif;
   background: #222;
 }
 
@@ -44,7 +44,8 @@ nav ul {
 }
 nav ul li {
   display: inline-block;
-  font-size: 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
   padding: 5px;
   text-transform: uppercase;
   color: #fff;
@@ -54,6 +55,14 @@ nav ul li.button {
   margin: 3px;
   cursor: pointer;
   border-radius: 3px;
+}
+
+nav .right {
+  float: right;
+}
+
+li.button#delete {
+  background: darkred;
 }
 
 /* Modals */
@@ -72,7 +81,7 @@ nav ul li.button {
   /*white-space: nowrap;*/
 }
 
-#overlay {
+.overlay {
   background: #000;
   opacity: 0.5;
   height: 100%;
@@ -81,6 +90,21 @@ nav ul li.button {
   top: 0;
   left: 0;
   z-index: 99;
+}
+
+.overlay-text {
+  width: 200px;
+  padding: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -105px;
+  background: #333;
+  text-align: center;
+  color: #fff;
+  z-index: 100;
+  font-size: 17px;
+  border-radius: 3px;
 }
 
 .message {
