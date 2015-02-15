@@ -44,10 +44,10 @@ nav ul {
 }
 nav ul li {
   display: inline-block;
-  font-size: 14px;
-  letter-spacing: 1px;
+  font-size: 17px;
+  /*letter-spacing: 1px;*/
   padding: 5px;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   color: #fff;
 }
 nav ul li.button {
@@ -55,6 +55,7 @@ nav ul li.button {
   margin: 3px;
   cursor: pointer;
   border-radius: 3px;
+  padding: 10px;
 }
 
 nav .right {
