@@ -1,2 +1,2 @@
 sudo mongod --fork --logpath /var/log/mongod.log
-sudo redis-server /var/www/conf/redis.conf
+sudo redis-server /home/site/firstbytes/conf/redis.conf
