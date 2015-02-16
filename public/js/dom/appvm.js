@@ -1,11 +1,11 @@
 // The beginning of KO integration. Need to pull in the stuff from
-// dom/editor.js and dom/user.js
+// dom/editor.js, dom/komodels.js and dom/user.js
 // requires moment.js, auth.js, repo.js
 (function(g) {
     var L = {
         LAST_SAVED_AT: 'Saved ', // todo interpolation
         UNSAVED: 'Unsaved',
-        DEFAULT_USERNAME_TEXT: 'Annonymous',
+        DEFAULT_USERNAME_TEXT: 'Sign in to save your progress!',
         MUST_LOGIN: 'You must log in',
         MUST_LOGIN_SAVE: 'To save your progress, you\'ll need to create an account or log in in with an existing account.',
         MUST_LOGIN_PROJECTS: 'You must log in to view your projects',
@@ -13,30 +13,6 @@
         PROJECT_DELETED: 'Project deleted',
         UNABLE_TO_SAVE: 'Unable to be saved'
     };
-
-    // Observable Objects
-    function Session(data) {
-        this.token = ko.observable(data.token);
-    }
-    function User(data) {
-        this._id = ko.observable(data._id);
-        this.name = ko.observable(data.name);
-        this.email = ko.observable(data.email);
-        this.locale = ko.observable(data.locale);
-    }
-    function Project(data) {
-        this._id = ko.observable(data._id);
-        this.name = ko.observable(data.name);
-        this.source = ko.observable(data.source);
-        this.state = ko.observable(data.state);
-        this.userId = ko.observable(data.userId);
-        this.privacy = ko.observable(data.privacy);
-        this.lesson = ko.observable(data.lesson);
-    }
-    // function Editor(data) {
-    //     this.dirty = ko.observable(data.dirty);
-    //     this.source = ko.observable(data.source);
-    // }
 
     // ViewModel
     function AppViewModel() {

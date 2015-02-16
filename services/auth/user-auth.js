@@ -41,7 +41,7 @@ L = {
 // @param {password} string
 // @param {callback} function (err, User)
 exports.lookup = function(username, password, callback) {
-    User.findOne({"email": username + ""}).exec(function(err, user) { // force strings on queries
+    User.findOne({'email': username + ''}).exec(function(err, user) { // force strings on queries
         if (err) return callback(err);
         if (!user) return callback(L.ERR_UNKNOWN_USER);
         if (!user.checkPassword(password)) return callback(L.ERR_PASSWORD);

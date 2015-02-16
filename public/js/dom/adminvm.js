@@ -5,31 +5,42 @@
     var L = {
     };
 
-    // todo dry
-    function User(data) {
-        this._id = ko.observable(data._id);
-        this.name = ko.observable(data.name);
-        this.email = ko.observable(data.email);
-        this.locale = ko.observable(data.locale);
-    }
-
     function AdminViewModel() {
-        var self;
-
+        var self, initSession;
         self = this;
 
-        // self.session = ko.observable(null); // new Session({})
-        // self.user = ko.observable(null); //new User({email: "asdlfkjals"})
-        // self.projects = ko.observableArray([]); // don't bother making these actual "Project" instances
-        // self.lessons = ko.observableArray([]);
-        // // self.editor = ko.observable(new Editor({}));
-        // self.username = ko.computed(function() {
-        //     return self.user() ? self.user().name() : L.DEFAULT_USERNAME_TEXT;
-        // });
+        self.user = ko.observable(null);
+        self.session = ko.observable(null);
+        self.students = ko.observableArray([]);
+        self.err = ko.observable(false);
+
+        // currently selected student / projects
+        self.student = ko.observable(null);
+        self.projects = ko.observableArray([]);
+
+        // todo dry up with edit version
+        self.authenticated = ko.computed(function() { return !!self.session(); }, this);
+        self.unauthenticated = ko.computed(function() { return !self.session(); }, this);
+
+        // dry up with editor version
+        initSession = function(err, response, status) {
+            if (err) return self.err(err);
+            self.session(new Session({token: response.token}));
+            self.user(new User(response.user));
+            self.authenticated(true);
+        };
+
+        self.cformlogin = function(form) {
+            var data = $(form).serialize();
+            auth(data, initSession);
+        };
     }
 
     // Main View Model
-    g.adminvm = new AppViewModel();
-    ko.applyBindings(g.adminvm);
+    g.adminvm = new AdminViewModel();
+
+    $(function() {
+        ko.applyBindings(g.adminvm);
+    });
 
 })(window);

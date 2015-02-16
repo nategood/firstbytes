@@ -6,7 +6,7 @@ block content
         @import url("/css/form.css");
     nav#menu
         div.error(data-bind="text: err, visible: err")
-        div.message(data-bind="text: message, visible: message")
+        //- div.message(data-bind="text: message, visible: message")
         ul
             li
                 input#projectname(placeholder="Project Name", data-bind="value: project() && project().name, visible: !project().lesson()")
@@ -80,14 +80,14 @@ block content
         p Change the background color of your program
         p Example: Change the background to green.
         code.
-            FB.background(FB.GREEN);
+            background(GREEN);
         h3 Paintbrush Color
         p.
             Change the "paint brush" that you will use when drawing shapes. Using this command alone, won't change anything
             so don't worry if typing this in doesn't change anything right away.
         p Example: Pick up a blue "paint brush".
         code.
-            FB.fill(FB.BLUE);
+            fill(BLUE);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -101,7 +101,7 @@ block content
         p Draw a square or rectangle (with the color of your paintbrush)
         p Example: Draw a rectangle at the position 10 left and 50 down, that is 100 wide and 200 high.
         code.
-            FB.rect(10, 50, 100, 200);
+            rect(10, 50, 100, 200);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -126,7 +126,7 @@ block content
         p Draw a Circle or an Ellipse
         p Example: Draw an Ellipse (a stretched circle) at the position 100 left and 75 down, that is 150 wide and 200 high .
         code.
-            FB.ellipse(100, 75, 150, 200);
+            ellipse(100, 75, 150, 200);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -147,7 +147,7 @@ block content
         p Write words to the Stage
         p Example: Write the words "Hello, Pittsburgh!" at the position 50 left and 100 down.
         code.
-            FB.text("Hello, Pittsburgh!", 50, 100);
+            text("Hello, Pittsburgh!", 50, 100);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -168,7 +168,7 @@ block content
             supported font names are "Arial", "Helvetica", "Times", and "Courier".
         p Example: Change your font to "Times" and make the font size to "20".
         code.
-            FB.textFont('Times', 20);
+            textFont('Times', 20);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -185,39 +185,39 @@ block content
         p Additional Example: Use "Times" font to write a large greeting in white
         code
             pre.
-                FB.fill(FB.WHITE);
-                FB.textFont('Times', 20);
-                Fb.text('Hello!', 100, 100);
+                fill(WHITE);
+                textFont('Times', 20);
+                text('Hello!', 100, 100);
         h2 Colors
         h3 List of Basic Colors
         p Here is a list of named colors that the Editor supports
         code
             pre.
-                FB.WHITE
-                FB.BLACK
-                FB.RED
-                FB.GREEN
-                FB.BLUE
-                FB.PURPLE
-                FB.PINK
-                FB.ORANGE
-                FB.YELLOW
-                FB.GREY
-                FB.BROWN
-                FB.DARKRED
-                FB.DARKGREEN
-                FB.DARKBLUE
-                FB.DARKPURPLE
-                FB.DARKPINK
-                FB.DARKORANGE
-                FB.DARKYELLOW
-                FB.DARKGREY
-                FB.DARKBROWN
+                WHITE
+                BLACK
+                RED
+                GREEN
+                BLUE
+                PURPLE
+                PINK
+                ORANGE
+                YELLOW
+                GREY
+                BROWN
+                DARKRED
+                DARKGREEN
+                DARKBLUE
+                DARKPURPLE
+                DARKPINK
+                DARKORANGE
+                DARKYELLOW
+                DARKGREY
+                DARKBROWN
         h3 Custom Colors
-        p Create your own colors by using FB.color. You can build colors by mixing red, green, and blue.
+        p Create your own colors by using color. You can build colors by mixing red, green, and blue.
         p Example: Create a light blue color using red, a lot of green, and a lot of blue.
         code.
-            FB.color(200, 255, 255);
+            color(200, 255, 255);
         p.
             The options (or <strong>parameters</strong>)
             <table>
@@ -233,7 +233,7 @@ block content
             </table>
         p Additional Example: Use your custom light blue color for the background
         code.
-            FB.background(FB.color(200, 255, 255));
+            background(color(200, 255, 255));
         //- h2 User Input
         //- h3 Mouse Clicking
         //- h3 Mouse Movement
@@ -262,6 +262,7 @@ block content
             Most of the foundation for the Sandbox is built upon Processing.js. For a detailed reference of processing.js you
             can visit the <a href="">processing.js reference</a>.
 
+    script(type="text/javascript", src="/js/dom/komodels.js")
     script(type="text/javascript", src="/js/dom/appvm.js")
     script(type="text/javascript", src="/js/auth.js")
     script(type="text/javascript", src="/js/repo.js")

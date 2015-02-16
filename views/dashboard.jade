@@ -1,0 +1,37 @@
+//- Very, very rough skeleton/mockup of what this page might have
+//- block content
+html
+    head
+        title First Bytes Society - Admin
+    body
+        header
+            h1 First Bytes Society - Admin
+            //- menu
+            //-     ul
+            //-         li Dashboard
+            //-         li Students
+            //-         li Support
+        h2.error(data-bind="visible: err, text: err")
+
+        section(data-bind="visible: unauthenticated")
+            form(id="login-form", method="post", class="simple", action="#", data-bind="submit: cformlogin")
+                input(name="email", placeholder="Email", autocomplete="off")
+                input(name="password", placeholder="Password", autocomplete="off", type="password")
+                button(type="submit") Sign In
+
+        section(data-bind="visible: authenticated")
+            h1 Students
+            ul(data-bind="foreach: students")
+                li(data-bind="text: name")
+        //- section
+        //-     h1 Support
+            //- Use some other pre built service for this to start? Intercomm.io
+
+        script(src="/components/jquery/dist/jquery.js")
+        script(src="/components/lodash/lodash.min.js")
+        script(src="/components/knockout/dist/knockout.js")
+        script(src="/components/easyModal.js/jquery.easyModal.js")
+        script(src="/js/dom/komodels.js")
+        script(src="/js/dom/adminvm.js")
+        script(src="/js/admin.js")
+        script(src="/js/auth.js")

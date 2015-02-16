@@ -20,6 +20,7 @@ var express = require('express'),
 
 var routes = {
   main: require('../routes'),
+  admin: require('../routes/admin'),
   user: require('../routes/user'),
   project: require('../routes/project'),
   lesson: require('../routes/lesson')
@@ -101,6 +102,9 @@ app.get('/stage/:id/', routes.main.stage);
 // 5456a64a4821d40000c092c8
 // app.get('/login/', routes.main.login);
 // app.get('/setup/', routes.main.setup);
+
+app.get('/admin/', routes.admin.index);
+app.get('/admin/students/', routes.admin.allStudents);
 
 app.get('/project/:id/', routes.project.get);
 app.put('/project/:id/', routes.project.update);
