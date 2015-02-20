@@ -66,4 +66,7 @@ $(function() {
         if (ecode === pcode) return;
         editor.setValue(pcode);
     }, appvm);
+
+    // initialize saving of vm state, see state.js
+    initStateListener(appvm, 'fb.state', populateKnockout);
 });

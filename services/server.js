@@ -104,7 +104,6 @@ app.get('/stage/:id/', routes.main.stage);
 // app.get('/setup/', routes.main.setup);
 
 app.get('/admin/', routes.admin.index);
-app.get('/admin/students/', routes.admin.allStudents);
 
 app.get('/project/:id/', routes.project.get);
 app.put('/project/:id/', routes.project.update);
@@ -114,6 +113,7 @@ app.post('/project/', routes.project.create);
 app.post('/user/auth/', routes.user.auth);
 app.post('/user/', routes.user.create);
 app.get('/user/:id/', routes.user.authFromToken);
+app.get('/users/', routes.user.allStudents);
 // app.put('/user/:id/', routes.user.?);
 
 app.get('/user/:id/projects/', routes.user.projects);

@@ -4,6 +4,11 @@
 (function(g) {
     var L = {
     };
+    var PAGES = {
+        DASHBOARD: 1,
+        STUDENT: 2
+    };
+    g.PAGES = PAGES;
 
     function AdminViewModel() {
         var self, initSession;
@@ -18,6 +23,9 @@
         self.student = ko.observable(null);
         self.projects = ko.observableArray([]);
 
+        // what is the current view? (excludes login view as that is implicit)
+        self.view = ko.observable(PAGES.DASHBOARD);
+
         // todo dry up with edit version
         self.authenticated = ko.computed(function() { return !!self.session(); }, this);
         self.unauthenticated = ko.computed(function() { return !self.session(); }, this);
@@ -27,12 +35,30 @@
             if (err) return self.err(err);
             self.session(new Session({token: response.token}));
             self.user(new User(response.user));
-            self.authenticated(true);
+            // self.authenticated(true);
         };
+        restoreSession = function(parsed) {
+            if (parsed.session) self.session(new Session(parsed.session));
+            if (parsed.user) self.user(new User(parsed.user));
+        };
+        g.restoreSession = restoreSession;
 
         self.cformlogin = function(form) {
             var data = $(form).serialize();
             auth(data, initSession);
+        };
+
+        self.cstudent = function(user, e) {
+            var token = self.session().token(); // todo token
+            self.view(PAGES.STUDENT);
+            self.student(new User(user));
+            // todo move this out of here... too much network / logic
+            fetchStudentDetails(user._id, token, function(err, response) {
+                console.log(err, response);
+                if (err || !response) return console.error(err); // todo messaging
+                if (response.length === 0) return console.error('could not'); // todo messaging
+                self.projects(response.projects);
+            });
         };
     }
 

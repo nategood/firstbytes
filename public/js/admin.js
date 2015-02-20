@@ -1,4 +1,4 @@
-// admin.js
+// admin.js, requires state.js, adminvm.js, jquery, knock out
 (function(g) {
 
     var L = {
@@ -7,8 +7,8 @@
     };
 
     // @param {function} callback (err string, students array)
-    g.fetchStudents = function(callback) {
-        var url = '/admin/students/';
+    g.fetchStudents = function(token, callback) {
+        var url = '/users/';
         $.ajax(url, {
             type: 'get',
             dataType: 'json',
@@ -22,6 +22,26 @@
         });
     };
 
+    g.fetchStudentDetails = function(userId, token, callback) {
+        // todo add in check for open inquiries
+        var url;
+        url = '/user/' + userId + '/projects';
+        $.ajax(url, {
+            type: 'get',
+            dataType: 'json',
+            headers: {'token': token},
+            success: function(response, status, xhr) {
+                // if (status != '200') return callback(L.GET_PROJECTS_ERROR);
+                callback(null, {
+                    projects: response
+                }); // nested to future proof for inquiries
+            },
+            error: function(xhr) {
+                callback(L.GET_PROJECTS_ERROR);
+            }
+        });
+    };
+
     g.initSession = function(err, response, status) {
         if (err) return self.err(err);
         self.session(new Session({token: response.token}));
@@ -30,10 +50,19 @@
         self.showlogin(false);
     };
 
+    g.clearSession = function() {
+        self.session(null);
+        self.user(null);
+    };
+
 })(window);
 
 $(function() {
-    fetchStudents(function(err, students) {
+    // state saving
+    initStateListener(adminvm, 'fb.state.admin', restoreSession);
+
+    // todo only do this after logging in! todo add in token!
+    fetchStudents('', function(err, students) {
         if (err) return adminvm.err(err);
         adminvm.students(students);
     });

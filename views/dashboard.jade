@@ -3,6 +3,8 @@
 html
     head
         title First Bytes Society - Admin
+        style(type="text/css").
+            ul.students li { cursor: pointer; }
     body
         header
             h1 First Bytes Society - Admin
@@ -19,18 +21,24 @@ html
                 input(name="password", placeholder="Password", autocomplete="off", type="password")
                 button(type="submit") Sign In
 
-        section(data-bind="visible: authenticated")
+        section(data-bind="visible: authenticated && view() === PAGES.DASHBOARD")
             h1 Students
-            ul(data-bind="foreach: students")
-                li(data-bind="text: name")
+            ul.students(data-bind="foreach: students")
+                li(data-bind="text: name, click: $parent.cstudent")
         //- section
         //-     h1 Support
             //- Use some other pre built service for this to start? Intercomm.io
+
+        section(data-bind="visible: authenticated && view() === PAGES.STUDENT && student")
+            h1(data-bind="text: student() && student().name") Student
+            ul(data-bind="foreach: projects")
+                li(data-bind="text: name")
 
         script(src="/components/jquery/dist/jquery.js")
         script(src="/components/lodash/lodash.min.js")
         script(src="/components/knockout/dist/knockout.js")
         script(src="/components/easyModal.js/jquery.easyModal.js")
+        script(src="/js/state.js")
         script(src="/js/dom/komodels.js")
         script(src="/js/dom/adminvm.js")
         script(src="/js/admin.js")

@@ -1,4 +1,4 @@
-var stats = require('../services/stats');
+// var stats = require('../services/stats');
 // var User = require('../models/user');
 // var Project = require('../models/project');
 // var auth = require('../services/auth/user-auth');
@@ -7,16 +7,6 @@ var stats = require('../services/stats');
 // base
 exports.index = function(req, res) {
     res.render('dashboard');
-};
-
-// admin api endpoints
-exports.allStudents = function(req, res) {
-    // todo require auth
-    stats.allStudents(function(err, students) {
-        if (err) return res.status(400).json({'error': err});
-        var data = students.map(function(s) { return s.toResponse(); });
-        res.json(data);
-    });
 };
 
 // // GET /user/ID/projects/?page=N&start=M

@@ -8,15 +8,34 @@ var User = require('../models/user');
 var Project = require('../models/project');
 var auth = require('../services/auth/user-auth');
 var modelRoute = require("../routes/_model");
+var stats = require('../services/stats');
 
-var createSession;
+var createSession, L;
+
+L = {
+  NOPE: 'Not allowed',
+};
+
+// GET /users/
+exports.allStudents = function(req, res) {
+    // todo require auth
+    stats.allStudents(function(err, students) {
+        if (err) return res.status(400).json({'error': err});
+        var data = students.map(function(s) { return s.toResponse(); });
+        res.json(data);
+    });
+};
 
 // GET /user/ID/projects/?page=N&start=M
 exports.projects = function(req, res) {
   // res.send("json", {});
-  auth.getAndAssetUserFromRequest(req, req.params.id, function(err, user) {
+  // don't check against user id in auth call because we'll allow admins access
+  auth.getAndAssetUserFromRequest(req, false, function(err, user) {
     if (err) return res.status(401).json({'error': err});
-    Project.find({userId: user._id}, function(err, projects) {
+    if (req.params.id != user._id && user.acl !== 1)  {
+      return res.status(401).json({'error': L.NOPE}); // allow admins
+    }
+    Project.find({userId: req.params.id}, function(err, projects) {
       if (err) return res.status(401).json({'error': err});
       res.json(projects.map(function(p) { return p.toResponse(); } ));
     });

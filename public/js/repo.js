@@ -65,12 +65,12 @@
         $.ajax('/project/' + project_id + '/', conf);
     };
 
-    // @param {string} user_id
+    // @param {string} userId
     // @param {string} token
     // @param {function} callback (string err, object projects)
-    repo.fetchAll = function(user_id, token, callback) {
+    repo.fetchAll = function(userId, token, callback) {
         var url;
-        url = '/user/' + user_id + '/projects';
+        url = '/user/' + userId + '/projects';
         $.ajax(url, {
             type: 'get',
             dataType: 'json',
