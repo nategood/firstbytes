@@ -6,7 +6,7 @@ $(function() {
     var addAutocomplete, langTools;
 
     addAutocomplete = function() {
-        langTools = ace.require("ace/ext/language_tools");
+        langTools = ace.require('ace/ext/language_tools');
         editor.setOptions({
             // enableBasicAutocompletion: true,
             // enableSnippets: true,
@@ -15,8 +15,7 @@ $(function() {
         var processingAutocompleter = {
             getCompletions: function(editor, session, pos, prefix, callback) {
                 if (prefix.length === 0) { callback(null, []); return; }
-                // todo link up Manual.js
-                callback(null, [{name: "apple", value: "banana", score: 123, meta: "function"}]);
+                callback(null, Manual.basic);
             }
         };
         for (var i = editor.completers.length - 1; i >= 0; i--) {

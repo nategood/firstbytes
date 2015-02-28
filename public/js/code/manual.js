@@ -1,5 +1,5 @@
 // Descriptions taken from Live Editor, Khan Academy
-$._ = function(a) { return a}; // being lazy in case we ever do use the translations
+$._ = function(a) { return a; }; // being lazy in case we ever do use the translations
 var Manual = {
     basic: [
         {

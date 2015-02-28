@@ -8,11 +8,9 @@ html
     body
         header
             h1 First Bytes Society - Admin
-            //- menu
-            //-     ul
-            //-         li Dashboard
-            //-         li Students
-            //-         li Support
+            menu
+                ul
+                    li(data-bind="visible: authenticated, click: clogout") Logout
         h2.error(data-bind="visible: err, text: err")
 
         section(data-bind="visible: unauthenticated")
@@ -21,18 +19,19 @@ html
                 input(name="password", placeholder="Password", autocomplete="off", type="password")
                 button(type="submit") Sign In
 
-        section(data-bind="visible: authenticated && view() === PAGES.DASHBOARD")
-            h1 Students
-            ul.students(data-bind="foreach: students")
-                li(data-bind="text: name, click: $parent.cstudent")
-        //- section
-        //-     h1 Support
-            //- Use some other pre built service for this to start? Intercomm.io
+        section(data-bind="visible: authenticated")
+            section(data-bind="visible: view() === PAGES.DASHBOARD")
+                h1 Students
+                ul.students(data-bind="foreach: students")
+                    li(data-bind="text: name, click: $parent.cstudent")
+            //- section
+            //-     h1 Support
+                //- Use some other pre built service for this to start? Intercomm.io
 
-        section(data-bind="visible: authenticated && view() === PAGES.STUDENT && student")
-            h1(data-bind="text: student() && student().name") Student
-            ul(data-bind="foreach: projects")
-                li(data-bind="text: name")
+            section(data-bind="visible: view() === PAGES.STUDENT && student")
+                h1(data-bind="text: student() && student().name") Student
+                ul(data-bind="foreach: projects")
+                    li(data-bind="text: name")
 
         script(src="/components/jquery/dist/jquery.js")
         script(src="/components/lodash/lodash.min.js")

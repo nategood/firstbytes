@@ -11,7 +11,7 @@
     g.PAGES = PAGES;
 
     function AdminViewModel() {
-        var self, initSession;
+        var self, initSession, restoreSession, clearSession;
         self = this;
 
         self.user = ko.observable(null);
@@ -35,11 +35,14 @@
             if (err) return self.err(err);
             self.session(new Session({token: response.token}));
             self.user(new User(response.user));
-            // self.authenticated(true);
         };
         restoreSession = function(parsed) {
             if (parsed.session) self.session(new Session(parsed.session));
             if (parsed.user) self.user(new User(parsed.user));
+        };
+        clearSession = function() {
+            self.session(null);
+            self.user(null);
         };
         g.restoreSession = restoreSession;
 
@@ -59,6 +62,10 @@
                 if (response.length === 0) return console.error('could not'); // todo messaging
                 self.projects(response.projects);
             });
+        };
+
+        self.clogout = function() {
+            clearSession();
         };
     }
 
