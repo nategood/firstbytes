@@ -15,7 +15,7 @@ var stage = function(selector) {
         // doesn't help with syntax errors...
         var payload = {
             type: 'code',
-            code: 'try{;' + code + '\n;}catch(e){console.log("Error!" + e);}'
+            code: 'try{;' + code + '\n;}catch(e){console.log("Error! " + e);}'
         };
         return publish(payload);
     };

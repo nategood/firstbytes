@@ -13,6 +13,8 @@ block content
             li(data-bind="visible: !!project().lesson()",style="color:#ccc") Lesson:
             li(data-bind="text: project() && project().name, visible: !!project().lesson()")
             li.button#save(data-bind="click: csave") Save
+            li.button#share(data-bind="visible: authenticated, click: cshare") Share
+            //- todo don't allow sharing when its a lesson. visible isn't respecting and / or.
             li.button#delete(data-bind="visible: authenticated, click: cdelete") Delete
             //- li.button#revert Revert
             //- li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot") Snap a Picture
@@ -30,7 +32,7 @@ block content
     div#instructions.instructions(data-bind="visible: !!project().lesson()")
         div
             h1(data-bind="text: project() && (project().name() + ' Instructions')")
-            p(data-bind="text: project() && project().instructions")
+            p(data-bind="html: project() && project().instructions")
     //- div#chat.chat
     div#overlay.overlay(data-bind="visible: showmodal, click: chidemodal")
     div.overlay(data-bind="visible: showloading")
@@ -66,28 +68,12 @@ block content
         ul.clickable(data-bind="foreach: lessons")
             li(data-bind="text: name, click: $parent.clessonselect")
     div#reference.modal(data-bind="visible: showreference")
-        //- Make this sticky
         h1 The Sandbox Manual
         //- input(type="search", placeholder="Search Manual")
         p.
             The Sandbox Manual is a guide to show you the instructions (also known as <strong>syntax</strong>) that you
             can use to build your programs. The Manual will explain the instruction, the different ways to use it
             (by changing what we call <strong>parameters</strong>), and show you an actual example that you can use and modify.
-        //- ul
-        //-     li
-        //-         a(href="#Painting") Painting
-        //-     li
-        //-         a(href="#Shapes") Shapes
-        //-     li
-        //-         a(href="#Words") Words
-        //-     li
-        //-         a(href="#Colors") Colors
-        //-     li
-        //-         a(href="#UserInput") User Input
-        //-     li
-        //-         a(href="#Animation") Animation
-        //-     li
-        //-         a(href="#Sandbox") About the Sandbox
         h2 Painting
         h3 Background Color
         p Change the background color of your program
@@ -283,3 +269,4 @@ block content
     script(type="text/javascript", src="/js/dom/editor.js")
     script(type="text/javascript", src="/js/state.js")
     script(type="text/javascript", src="/components/momentjs/moment.js")
+    script(type="text/javascript", src="/components/marked/lib/marked.js")

@@ -51,7 +51,9 @@ html
                     li(data-bind="text: name, click: $parent.cproject")
 
             section(data-bind="visible: view() === PAGES.PROJECT && project")
-                h2 Project
+                h2(data-bind="text: project() && ('Project: ' + project().name)")
+                //- a(data-bind="text") todo href support # and push state
+                h3 Source
                 pre(data-bind="text: project() && project().source")
 
             section(data-bind="visible: view() === PAGES.LESSONS && lessons")
@@ -63,12 +65,15 @@ html
                 h2 Lesson
                 p(data-bind="text: lesson() && ('Category: ' + lesson().category)")
                 p(data-bind="text: lesson() && ('Desc: ' + lesson().description)")
+                p(data-bind="html: lesson() && ('Instructions: ' + marked(lesson().instructions))")
+                h3 Source
                 pre(data-bind="text: lesson() && lesson().source")
 
         script(src="/components/jquery/dist/jquery.js")
         script(src="/components/lodash/lodash.min.js")
         script(src="/components/knockout/dist/knockout.js")
-        script(src="/components/easyModal.js/jquery.easyModal.js")
+        //- script(src="/components/easyModal.js/jquery.easyModal.js")
+        script(type="text/javascript", src="/components/marked/lib/marked.js")
         script(src="/js/state.js")
         script(src="/js/dom/komodels.js")
         script(src="/js/dom/adminvm.js")

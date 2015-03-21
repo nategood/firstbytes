@@ -7,7 +7,8 @@
         SAVE_ERROR: 'Whoops! Looks like we were not able to save your code. Bummer. Make sure you are online.',
         DATA_ERROR: 'Whoops! Looks like we were not able to save your code. Looks like we had trouble reading your program.',
         DELETE_ERROR: 'Whoops! Looks like we were not able to delete this project.',
-        GET_PROJECTS_ERROR: 'Uh oh. We were not able to fetch your projects. Make sure you are online.'
+        GET_PROJECTS_ERROR: 'Uh oh. We were not able to fetch your projects. Make sure you are online.',
+        GET_USER_ERROR: 'Uh oh. We were not able to locate that student. Make sure you are online.'
     };
 
     // @param {string} user_id
@@ -179,6 +180,24 @@
             },
             error: function(xhr) {
                 callback(L.GET_PROJECTS_ERROR);
+            }
+        });
+    };
+
+
+    // @param {function} callback (string err, object lessons)
+    repo.fetchStudent = function(id, token, callback) {
+        var url;
+        url = '/user/' + id;
+        $.ajax(url, {
+            type: 'get',
+            dataType: 'json',
+            headers: {'token': token},
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.GET_USER_ERROR);
             }
         });
     };

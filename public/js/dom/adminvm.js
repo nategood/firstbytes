@@ -65,7 +65,7 @@
             // todo move this out of here... too much network / logic
             fetchStudentDetails(user._id, token, function(err, response) {
                 if (err || !response) return console.error(err); // todo messaging
-                if (response.length === 0) return console.error('could not'); // todo messaging
+                if (response.length === 0) return console.error('Could not fetch student details'); // todo messaging
                 self.projects(response.projects);
             });
         };
@@ -83,7 +83,7 @@
             var token = self.session().token();
             self.view(PAGES.LESSON);
             repo.fetchLesson(project._id, token, function(err, response) { // todo DRY w cproject
-                console.log(response);
+                // console.log(response);
                 if (err || !response) return console.error(err); // todo messaging
                 self.lesson(response);
             });

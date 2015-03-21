@@ -152,10 +152,9 @@
                 name: lesson.name,
                 source: lesson.source,
                 lesson: lesson._id,
-                instructions: lesson.instructions,
+                instructions: marked(lesson.instructions), // convert to html
                 userId: self.user()._id() // server side will validate
             }));
-            console.log("LESSON", self.project().instructions());
             self.chidemodal();
         };
         self.cshowreference = function() {
@@ -176,6 +175,11 @@
                 self.message(L.PROJECT_DELETED);
                 clearProjectState();
             });
+        };
+        self.cshare = function() {
+            if (!self.project()) return;
+            var id = self.project()._id();
+            window.location.href = "/stage/" + id;
         };
         self.csave = function() {
             if (self.authenticated()) {
