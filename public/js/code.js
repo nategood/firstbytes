@@ -6,7 +6,7 @@ var Code = function() {
         // don't require defining draw/setup functions
         // think we always want to require the namespacing for now
         // this may change if we seek interoperability with KA sketches
-        src = 'FB.draw = function() {' + src + '\n;};';
+        // src = 'FB.draw = function() {' + src + '\n;};';
         return buildSrc(src);
     };
     buildSrc = function(src) {
@@ -26,7 +26,7 @@ var Code = function() {
 
         var hintDirective = '';
         JSHINT(hintDirective + src); // yucky global state
-        console.log(JSHINT.data(), JSHINT.errors);
+        // console.log(JSHINT.data(), JSHINT.errors);
         return JSHINT.data();
     };
     return {

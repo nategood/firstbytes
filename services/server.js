@@ -110,6 +110,9 @@ app.put('/project/:id/', routes.project.update);
 app.delete('/project/:id/', routes.project.delete);
 app.post('/project/', routes.project.create);
 
+// app.get('/project/:id/revisions/', routes.project.create);
+app.post('/project/:id/revisions/', routes.project.saveRevision);
+
 app.post('/user/auth/', routes.user.auth);
 app.post('/user/', routes.user.create);
 app.get('/user/:id/', routes.user.authFromToken);

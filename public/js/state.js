@@ -22,9 +22,19 @@
             console.log('Loaded previous state', parsed);
         }
 
+        g.state.clear = function() {
+            localStorage.clear();
+        };
+
         // hack for now. ideally find a nice way to subscribe to all ko state changes.
         setInterval(function() {
             g.state.save();
+            // console.log('Background save current state:', localStorage);
         }, 2000);
+
+        // todo does this overwire any other hooks?
+        window.onbeforeunload = function() {
+            g.state.save();
+        };
     };
 })(window);

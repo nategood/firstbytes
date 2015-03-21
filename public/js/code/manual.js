@@ -4,7 +4,8 @@ var Manual = {
     basic: [
         {
             name: "rect(x, y, width, height, radius*)",
-            value: "rect",
+            caption: "rect(x, y, width, height, radius*)",
+            value: "rect(50, 100, 200, 300);",
             type: "function",
             exampleURL: "/cs/rectx-y-w-h/839496660",
             description: $._("Draws a rectangle, using the first two coordinates as the top left corner and the last two as the width/height. For alternate ways to position, see rectMode."),
@@ -18,7 +19,8 @@ var Manual = {
         },
         {
             name: "ellipse(x, y, w, h)",
-            value: "ellipse",
+            caption: "ellipse(x, y, w, h)",
+            value: "ellipse(50, 100, 200, 300);",
             type: "function",
             exampleURL: "/cs/ellipsex-y-w-h/839435680",
             description: $._("Draws an ellipse, using the first two parameters as the center coordinates and the last two as the width/height. For alternate ways to position, see ellipseMode."),
@@ -31,7 +33,8 @@ var Manual = {
         },
         {
             name: "triangle(x1, y1, x2, y2, x3, y3)",
-            value: "triangle",
+            caption: "triangle(x1, y1, x2, y2, x3, y3)",
+            value: "triangle(10, 10, 30, 30, 10, 30);",
             type: "function",
             exampleURL: "/cs/trianglex1-y1-x2-y2-x3-y3/839546599",
             description: $._("Draws a triangle"),
@@ -46,7 +49,8 @@ var Manual = {
         },
         {
             name: "line(x1, y1, x2, y2)",
-            value: "line",
+            caption: "line(x1, y1, x2, y2)",
+            value: "line(0, 250, 500, 250);",
             type: "function",
             exampleURL: "/cs/linex1-y1-x2-y2/827916099",
             description:
@@ -60,7 +64,8 @@ var Manual = {
         },
         {
             name: "point(x, y)",
-            value: "point",
+            caption: "point(x, y)",
+            value: "point(250, 250);",
             type: "function",
             exampleURL: "/cs/pointx-y/827809834",
             description: $._("Draws a point. The color is determined by the most recent stroke() call and the thickness is determined by the most recent strokeWeight() call."),
@@ -71,7 +76,8 @@ var Manual = {
         },
         {
             name: "arc(x, y, w, h, start, stop)",
-            value: "arc",
+            caption: "arc(x, y, w, h, start, stop)",
+            value: "arc(50, 250, 100, 200, 0, 15);",
             type: "function",
             exampleURL: "/cs/arcx-y-w-h-start-stop/1903619297",
             description: $._("Draws an arc.   It is very similar to an ellipse(), except that the final two parameters, start and stop, decide how much of the ellipse to draw."),
@@ -86,7 +92,8 @@ var Manual = {
         },
         {
             name: "background(r, g, b, a*)",
-            value: "background",
+            caption: "background(r, g, b, a*)",
+            value: "background(255, 0, 0);",
             type: "function",
             exampleURL: "/cs/backgroundr-g-b/839653892",
             description: $._("Sets the background color of the canvas. Note that calling this will color over anything drawn before the command."),
@@ -99,7 +106,8 @@ var Manual = {
         },
         {
             name: "fill(r, g, b, a*)",
-            value: "fill",
+            caption: "fill(r, g, b, a*)",
+            value: "fill(255, 0, 0);",
             type: "function",
             exampleURL: "/cs/fillr-g-b/839774957",
             description: $._("Sets the fill color for all shapes drawn after the function call."),
@@ -112,7 +120,8 @@ var Manual = {
         },
         {
             name: "stroke(r, g, b, a*)",
-            value: "stroke",
+            caption: "stroke(r, g, b, a*)",
+            value: "stroke(255, 0, 0);",
             type: "function",
             exampleURL: "/cs/stroker-g-b/839545910",
             description: $._("Sets the outline color for all shapes drawn after the function call."),
@@ -125,19 +134,23 @@ var Manual = {
         },
         {
             name: "noFill()",
-            value: "noFill",
+            caption: "noFill()",
+            value: "noFill();",
             type: "function",
             exampleURL: "/cs/nofill/877946290",
             description: $._("Makes all shapes drawn after this function call transparent.")
         },
         {
-            name:"noStroke()",
+            name: "noStroke()",
+            caption: "noStroke()",
+            value: "noStroke();",
             exampleURL: "/cs/nostroke/839859412",
             description: $._("Disables outlines for all shapes drawn after the function call.")
         },
         {
             name: "text(message, x, y, width*, height*)",
-            value: "text",
+            caption: "text(message, x, y, width*, height*)",
+            value: "text(\"Your Message\", 250, 30);",
             type: "function",
             exampleURL: "/cs/texttext-x-y/937624625",
             description: $._("Draws a string of text at the specified location"),
@@ -151,7 +164,8 @@ var Manual = {
         },
         {
             name: "textFont(font, size*)",
-            value: "textFont",
+            caption: "textFont(font, size*)",
+            value: "textFont(\"Helvetica\");",
             type: "function",
             exampleURL: "/cs/textfontfont-size/940030209",
             description: $._("Using textFont() with createFont(), it's possible to change the font of text drawn."),

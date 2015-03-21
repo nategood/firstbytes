@@ -1,9 +1,9 @@
 extends main
 
 block content
-    header First Bytes Society - Editor
     style.
         @import url("/css/form.css");
+    //- header First Bytes Society - Editor
     nav#menu
         div.error(data-bind="text: err, visible: err")
         //- div.message(data-bind="text: message, visible: message")
@@ -15,7 +15,7 @@ block content
             li.button#save(data-bind="click: csave") Save
             li.button#delete(data-bind="visible: authenticated, click: cdelete") Delete
             //- li.button#revert Revert
-            li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot") Snap a Picture
+            //- li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot") Snap a Picture
             li.button#projects-button(data-bind="visible: authenticated, click: cshowprojects") My Projects
             li.button#lessons-button(data-bind="visible: authenticated, click: cshowlessons") Lessons
             li.button#logout-button(data-bind="visible: authenticated, click: cnewproject") New Project
@@ -26,24 +26,37 @@ block content
             li.button.right#login-button(data-bind="visible: unauthenticated, click: cshowsignin") Sign In
             li.button.right#logout-button(data-bind="visible: authenticated, click: csignout") Sign Out
     iframe#sandbox(class="sandbox", src="/canvas", width="500", height="500", scrolling="off")
-    div#editor(class="editor")
+    div#editor.editor(data-bind="style: { height: !!project().lesson() ? '250px' : '500px'}")
+    div#instructions.instructions(data-bind="visible: !!project().lesson()")
+        div
+            h1(data-bind="text: project() && (project().name() + ' Instructions')")
+            p(data-bind="text: project() && project().instructions")
+    //- div#chat.chat
     div#overlay.overlay(data-bind="visible: showmodal, click: chidemodal")
     div.overlay(data-bind="visible: showloading")
     div.overlay-text(data-bind="visible: showloading") Loading...
     div#login.modal(data-bind="visible: showlogin")
         div.error(data-bind="text: err, visible: err")
-        h1 Sign In
-        form(id="login-form", method="post", class="simple", action="#", data-bind="submit: cformlogin")
-            input(name="email", placeholder="Email", autocomplete="off")
-            input(name="password", placeholder="Password", autocomplete="off", type="password")
-            button(type="submit") Sign In
-        h3 or
-        h1 Create Account
-        form(id="signup-form", method="post", class="simple", action="#", data-bind="submit: cformsignup")
-            input(name="name", placeholder="Name", autocomplete="off")
-            input(name="email", placeholder="Email", autocomplete="off")
-            input(name="password", placeholder="Password", autocomplete="off", type="password")
-            button(type="submit") Sign Up
+        h1 Sign In or Create an Account
+        p.
+            Save your progress by signing in to your First Bytes account. If you do not have one, you can
+            create a new account by providing your email.
+        div(style="height: 300px")
+            section(style="width: 50%; position: absolute; margin-left: 50%")
+                h1 Create Account
+                form(id="signup-form", method="post", class="simple", action="#", data-bind="submit: cformsignup")
+                    input(name="name", placeholder="Name", autocomplete="off")
+                    input(name="email", placeholder="Email", autocomplete="off")
+                    input(name="password", placeholder="Password", autocomplete="off", type="password")
+                    button(type="submit") Sign Up
+            div(style="width: 3px; height: 150px; background: #ccc; position: absolute; margin-left: 42.5%; margin-top: 25px")
+            section(style="width: 50%; position: absolute;")
+                h1 Sign In
+                form(id="login-form", method="post", class="simple", action="#", data-bind="submit: cformlogin")
+                    input(name="email", placeholder="Email", autocomplete="off")
+                    input(name="password", placeholder="Password", autocomplete="off", type="password")
+                    button(type="submit") Sign In
+        //- h3 or
     div#projects.modal(data-bind="visible: showprojects")
         h1 Projects
         ul.clickable(data-bind="foreach: projects")
@@ -260,7 +273,7 @@ block content
         h2 Advanced Documentation
         p.
             Most of the foundation for the Sandbox is built upon Processing.js. For a detailed reference of processing.js you
-            can visit the <a href="">processing.js reference</a>.
+            can visit the <a href="http://processingjs.org/reference/">processing.js reference</a>.
 
     script(type="text/javascript", src="/js/dom/komodels.js")
     script(type="text/javascript", src="/js/dom/appvm.js")

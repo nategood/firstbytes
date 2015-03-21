@@ -4,34 +4,66 @@ html
     head
         title First Bytes Society - Admin
         style(type="text/css").
+            @import url('/css/app.css');
+        style(type="text/css").
             ul.students li { cursor: pointer; }
     body
         header
             h1 First Bytes Society - Admin
-            menu
-                ul
-                    li(data-bind="visible: authenticated, click: clogout") Logout
+            nav.top-bar(data-topbar, role="navigation")
+                section.top-bar-section
+                    ul.right
+                        li
+                            a(data-bind="visible: authenticated, click: clogout", href="#") Logout
+                    ul.left
+                        li(data-bind="css: { active: view() === PAGES.DASHBOARD }")
+                            a(data-bind="click: cdashboard", href="#") Dashboard
+                        li(data-bind="css: { active: view() === PAGES.CHAT }")
+                            a(data-bind="", href="#") Chat
+                        li(data-bind="css: { active: view() === PAGES.STUDENTS }")
+                            a(data-bind="click: cstudents", href="#") Students
+                        li(data-bind="css: { active: view() === PAGES.LESSONS }")
+                            a(data-bind="click: clessons", href="#") Lessons
         h2.error(data-bind="visible: err, text: err")
 
-        section(data-bind="visible: unauthenticated")
+        section.content(data-bind="visible: unauthenticated")
             form(id="login-form", method="post", class="simple", action="#", data-bind="submit: cformlogin")
-                input(name="email", placeholder="Email", autocomplete="off")
+                input(name="email", placeholder="Email", autocomplete="off", type="email")
                 input(name="password", placeholder="Password", autocomplete="off", type="password")
                 button(type="submit") Sign In
 
-        section(data-bind="visible: authenticated")
+        section.content(data-bind="visible: authenticated")
             section(data-bind="visible: view() === PAGES.DASHBOARD")
-                h1 Students
+                h2 Dashboard
+                h3 Students
                 ul.students(data-bind="foreach: students")
                     li(data-bind="text: name, click: $parent.cstudent")
-            //- section
-            //-     h1 Support
-                //- Use some other pre built service for this to start? Intercomm.io
+
+            section(data-bind="visible: view() === PAGES.STUDENTS")
+                h2 Students
+                ul.students(data-bind="foreach: students")
+                    li(data-bind="text: name, click: $parent.cstudent")
 
             section(data-bind="visible: view() === PAGES.STUDENT && student")
-                h1(data-bind="text: student() && student().name") Student
+                h2(data-bind="text: student() && student().name") Student
+                span(data-bind="text: projects().length + ' projects'")
                 ul(data-bind="foreach: projects")
-                    li(data-bind="text: name")
+                    li(data-bind="text: name, click: $parent.cproject")
+
+            section(data-bind="visible: view() === PAGES.PROJECT && project")
+                h2 Project
+                pre(data-bind="text: project() && project().source")
+
+            section(data-bind="visible: view() === PAGES.LESSONS && lessons")
+                h2 Lessons
+                ul.students(data-bind="foreach: lessons")
+                    li(data-bind="text: name, click: $parent.clesson")
+
+            section(data-bind="visible: view() === PAGES.LESSON && lesson")
+                h2 Lesson
+                p(data-bind="text: lesson() && ('Category: ' + lesson().category)")
+                p(data-bind="text: lesson() && ('Desc: ' + lesson().description)")
+                pre(data-bind="text: lesson() && lesson().source")
 
         script(src="/components/jquery/dist/jquery.js")
         script(src="/components/lodash/lodash.min.js")
@@ -42,3 +74,4 @@ html
         script(src="/js/dom/adminvm.js")
         script(src="/js/admin.js")
         script(src="/js/auth.js")
+        script(src="/js/repo.js")

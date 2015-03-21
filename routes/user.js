@@ -28,13 +28,14 @@ exports.allStudents = function(req, res) {
 
 // GET /user/ID/projects/?page=N&start=M
 exports.projects = function(req, res) {
-  // res.send("json", {});
   // don't check against user id in auth call because we'll allow admins access
   auth.getAndAssetUserFromRequest(req, false, function(err, user) {
+    console.log(req.params.id, err);
     if (err) return res.status(401).json({'error': err});
     if (req.params.id != user._id && user.acl !== 1)  {
       return res.status(401).json({'error': L.NOPE}); // allow admins
     }
+    console.log(req.params.id);
     Project.find({userId: req.params.id}, function(err, projects) {
       if (err) return res.status(401).json({'error': err});
       res.json(projects.map(function(p) { return p.toResponse(); } ));

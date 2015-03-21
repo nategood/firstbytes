@@ -141,8 +141,8 @@
             self.chidemodal();
         };
         self.cshowlessons = function() {
-            // fire off a request async - ideally have a loading state
-            repo.fetchLessons(function(err, lessons) {
+            // Only fetch the Intro lessons for now
+            repo.fetchLessons('Intro', function(err, lessons) {
                 self.lessons(lessons);
             });
             self.showlessons(true);
@@ -152,8 +152,10 @@
                 name: lesson.name,
                 source: lesson.source,
                 lesson: lesson._id,
+                instructions: lesson.instructions,
                 userId: self.user()._id() // server side will validate
             }));
+            console.log("LESSON", self.project().instructions());
             self.chidemodal();
         };
         self.cshowreference = function() {

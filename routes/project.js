@@ -8,6 +8,7 @@
  */
 var Project = require("../models/project.js");
 var auth = require("../services/auth/user-auth.js");
+var ProjectManager = require("../services/project/manager.js");
 
 var L = {
     COULD_NOT_AUTH: 'Could not authenticate user',
@@ -58,7 +59,7 @@ exports.delete = function(req, res) {
         if (err || !user) return res.status(400).json({error: L.COULD_NOT_AUTH});
         Project.findById(req.params.id, function(err, project) {
             if (err) return res.status(400).json({error: L.PROJECT_DOES_NOT_EXSIST});
-            console.log(project,project.userId.toString(), user._id.toString());
+            // console.log(project,project.userId.toString(), user._id.toString());
             if (project.userId.toString() !== user._id.toString()) return res.status(400).json({error: L.NOT_YOUR_PROJECT});
             Project.remove({_id: project._id}, function(err) {
                 if (err) return res.status(400).json({error: L.UNABLE_TO_DELETE});
@@ -84,12 +85,18 @@ exports.get = function(req, res) {
 
 // POST /project/ID/revisions/
 exports.saveRevision = function(req, res) {
-    var pm = new ProjectManager(req.params.id);
-    req.body.saved = Date.now(); // force it for now at least
-    pm.addRevision(req.body, function(err, revision) {
-        if (err) return res.json(500, {"error": err});
-        if (!revision) return res.status(404).json({"error": L.COULD_NOT_AUTH});
-        res.json(revision);
+    auth.getUserFromRequest(req, function(err, user) {
+        if (err || !user) return res.status(400).json({error: L.COULD_NOT_AUTH});
+        Project.findById(req.params.id, function(err, project) {
+            if (project.userId.toString() !== user._id.toString()) return res.status(400).json({error: L.NOT_YOUR_PROJECT});
+            var pm = new ProjectManager(req.params.id);
+            req.body.saved = Date.now(); // force it for now at least
+            pm.saveRevision(req.body, function(err, revision) {
+                if (err) return res.json(500, {"error": err});
+                if (!revision) return res.status(404).json({"error": L.COULD_NOT_AUTH});
+                res.json(revision);
+            });
+        });
     });
 };
 

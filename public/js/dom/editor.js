@@ -4,6 +4,7 @@
 $(function() {
     var editor = ace.edit('editor');
     var addAutocomplete, langTools;
+    var backgroundSaveInterval = 2000, backgroundSavePrevious = false, backgroundSavePreviousTime = null;
 
     addAutocomplete = function() {
         langTools = ace.require('ace/ext/language_tools');
@@ -65,6 +66,30 @@ $(function() {
         if (ecode === pcode) return;
         editor.setValue(pcode);
     }, appvm);
+
+    // todo get out of here
+    // background implicit revision saving
+    // todo make this a sliding scale of diff size and time since last background save
+    //    we don't need to save *every* key stroke
+    setInterval(function() {
+        if (backgroundSavePrevious === false) {
+            backgroundSavePrevious = appvm.project().source();
+            return;
+        }
+        if (backgroundSavePrevious !== appvm.project().source() && appvm.authenticated() && appvm.dirty()) {
+            backgroundSavePrevious = appvm.project().source();
+            var revision = {
+                projectId: appvm.project()._id(),
+                source: appvm.project().source()
+                // type: 1,
+                // err: errors
+            };
+            repo.saveRevision(appvm.user()._id(), appvm.session().token(), revision, function(err, revision) {
+                console.log(err, revision);
+                backgroundSavePreviousTime = new Date();
+            });
+        }
+    }, backgroundSaveInterval);
 
     // initialize saving of vm state, see state.js
     initStateListener(appvm, 'fb.state', populateKnockout);

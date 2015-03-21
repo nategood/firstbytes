@@ -44,6 +44,38 @@
         }
     };
 
+    // @param {string} user_id
+    // @param {string} token
+    // @param {object} revision pojo representation of project
+    // @param {function} callback (string err, object response)
+    repo.saveRevision = function(user_id, token, revision, callback) {
+        // if (typeof project === 'string') {
+        //     project = JSON.parse(project);
+        // }
+        // if (typeof project !== 'object') {
+        //     return callback(L.DATA_ERROR);
+        // }
+        if (!revision.projectId) {
+            return callback(L.DATA_ERROR);
+        }
+
+        var conf = {
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            headers: {'token': token},
+            data: JSON.stringify(revision),
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.SAVE_ERROR);
+            }
+        };
+
+        $.ajax('/project/' + revision.projectId + '/revisions/', conf);
+    };
+
 
     // @param {string} project_id
     // @param {string} token
@@ -108,10 +140,36 @@
         $.ajax(url, conf);
     };
 
+
+    // @param {string} id project id to fetch
+    // @param {string} token [optional] token to optionally authenticate with
+    // @param {function} callback (string err, object project)
+    repo.fetchLesson = function(id, token, callback) {
+        // todo dry with project
+        if (typeof token === 'function' && typeof callback === 'undefined') {
+            callback = token;
+            token = undefined;
+        }
+        var url, conf;
+        url = '/lesson/' + id + '/';
+        conf = {
+            type: 'get',
+            dataType: 'json',
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.GET_PROJECTS_ERROR);
+            }
+        };
+        if (token) conf.headers = {'token': token};
+        $.ajax(url, conf);
+    };
+
     // @param {function} callback (string err, object lessons)
-    repo.fetchLessons = function(callback) {
+    repo.fetchLessons = function(category, callback) {
         var url;
-        url = '/lessons/Intro'; // sticking to default category for now "Intro", can switch this out in the future
+        url = '/lessons/' + category;
         $.ajax(url, {
             type: 'get',
             dataType: 'json',
