@@ -12,7 +12,7 @@ exports.index = function(req, res) {
 // // GET /user/ID/projects/?page=N&start=M
 // exports.student = function(req, res) {
 //   // res.send("json", {});
-//   auth.getAndAssetUserFromRequest(req, req.params.id, function(err, user) {
+//   auth.getAndAssertUserFromRequest(req, req.params.id, function(err, user) {
 //     if (err) return res.status(401).json({'error': err});
 //     Project.find({userId: user._id}, function(err, projects) {
 //       if (err) return res.status(401).json({'error': err});
@@ -45,7 +45,7 @@ exports.index = function(req, res) {
 
 // // GET /user/ID
 // exports.authFromToken = function(req, res) {
-//   auth.getAndAssetUserFromRequest(req, req.params.id, function(err, user) {
+//   auth.getAndAssertUserFromRequest(req, req.params.id, function(err, user) {
 //     if (err) return res.status(400).json({'error': err});
 //     res.json({"token": req.get('token'), "user": user.toResponse()});
 //   });
