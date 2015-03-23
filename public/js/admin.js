@@ -12,6 +12,24 @@
         $.ajax(url, {
             type: 'get',
             dataType: 'json',
+            headers: {'token': token},
+            success: function(response, status, xhr) {
+                if (xhr.status != 200) return callback(L.ERROR);
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.ERROR);
+            }
+        });
+    };
+
+    // @param {function} callback (err string, students array)
+    g.fetchAdmins = function(token, callback) {
+        var url = '/users/admins/';
+        $.ajax(url, {
+            type: 'get',
+            dataType: 'json',
+            headers: {'token': token},
             success: function(response, status, xhr) {
                 if (xhr.status != 200) return callback(L.ERROR);
                 callback(null, response);
@@ -60,10 +78,4 @@
 $(function() {
     // state saving
     initStateListener(adminvm, 'fb.state.admin', restoreSession);
-
-    // todo only do this after logging in! todo add in token!
-    fetchStudents('', function(err, students) {
-        if (err) return adminvm.err(err);
-        adminvm.students(students);
-    });
 });

@@ -7,13 +7,19 @@ var uuid = require('node-uuid');
 var User = require('../models/user');
 var Project = require('../models/project');
 var auth = require('../services/auth/user-auth');
-var modelRoute = require("../routes/_model");
+var modelRoute = require('../routes/_model');
 var stats = require('../services/stats');
 
-var createSession, L;
+var createSession, L, restricted;
 
 L = {
-  NOPE: 'Not allowed',
+  NOPE: 'Unauthorized – Must be an admin user',
+};
+
+restricted = {
+  '/stats/overall/': true,
+  '/users/': true,
+  '/users/admins/': true
 };
 
 // GET /users/
@@ -22,6 +28,16 @@ exports.allStudents = function(req, res) {
     stats.allStudents(function(err, students) {
         if (err) return res.status(400).json({'error': err});
         var data = students.map(function(s) { return s.toResponse(); });
+        res.json(data);
+    });
+};
+
+// GET /admins/
+exports.allAdmins = function(req, res) {
+    // todo require auth
+    stats.allAdmins(function(err, admins) {
+        if (err) return res.status(400).json({'error': err});
+        var data = admins.map(function(s) { return s.toResponse(); });
         res.json(data);
     });
 };
@@ -55,7 +71,7 @@ exports.auth = function(req, res) {
       if (err) return res.status(400).json({'error': err});
       if (!user) return res.status(400).send('json', {'error': E_UNKNOWN_USER});
       token = createSession(req, user);
-      res.json({"token": token, "user": user.toResponse()});
+      res.json({'token': token, 'user': user.toResponse()});
   });
 };
 
@@ -66,7 +82,7 @@ exports.create = function(req, res) {
   user.save(function(err) {
     if (err) return res.status(400).json({'error': err});
     var token = createSession(req, user);
-    res.json({"token": token, "user": user.toResponse()});
+    res.json({'token': token, 'user': user.toResponse()});
   });
 };
 
@@ -74,18 +90,30 @@ exports.create = function(req, res) {
 exports.authFromToken = function(req, res) {
   auth.getAndAssertUserFromRequest(req, req.params.id, function(err, user) {
     if (err) return res.status(400).json({'error': err});
-    res.json({"token": req.get('token'), "user": user.toResponse()});
+    res.json({'token': req.get('token'), 'user': user.toResponse()});
+  });
+};
+
+exports.authAdminCheck = function(req, res, next) {
+  var token = req.get('token');
+  if (!(req.path in restricted)) return next();
+  var userId = req.session[token];
+  if (!token || !userId) return res.status(401).json({error: L.NOPE});
+  auth.fetchUserAndCheckPermission(userId, 'TBD', function(err, user) {
+    if (err) return res.status(401).json({error: L.NOPE});
+    next();
   });
 };
 
 createSession = function(req, user) {
   var token = uuid.v4();
   req.session.user = req.session[token] = user._id;
+  // req.session.acl = user.acl;
   return token;
 };
 
 // POST /user/login/ (unlike auth, returns a session cookie)
 // exports.login = function(req, res) {
 //     // todo pull in passport integration
-//     // passport.authenticate("local", { successRedirect: "/", failureRedirect: "/login", failureFlash: true });
+//     // passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true });
 // };

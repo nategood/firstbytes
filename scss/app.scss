@@ -53,3 +53,14 @@ h1, h2, h3, h4 {
 section.content {
     padding: $pad;
 }
+
+#sandbox {
+    border: none;
+    float: right;
+}
+
+.stat {
+    display: block;
+    font-size: 24px;
+    color: #eee;
+}

@@ -1,7 +1,8 @@
 module.exports = function(server) {
     var wipedb = function(done) {
         if (server.app.get('env') !== 'test') {
-            console.warn('Environment must be test. Currently it is ', server.app.get('env'), '. Not wiping database.');
+            console.warn('Environment must be test. Currently it is ' + server.app.get('env') + '. Not continuing. Please run with NODE_ENV=test nodeunit test.js.');
+            process.exit(1);
             done();
             return;
         }

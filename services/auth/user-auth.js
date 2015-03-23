@@ -90,7 +90,7 @@ exports.getUser = function(userId, callback) {
 
 // @param {userId} String user id to check against, if false will default
 // @param {permission} string the permission in question (moot for now as we don't have specific permissions quite yet)
-// @param {function} callback (err)
+// @param {function} callback (err, user)
 exports.fetchUserAndCheckPermission = function(userId, permission, callback) {
     exports.getUser(userId, function(err, user) {
         if (err) return callback(err);
@@ -104,3 +104,5 @@ exports.hasPermission = function(user, permission) {
     // todo add more permissions and make this more specific
     return user && user.acl === User.acl.ADMIN;
 };
+
+

@@ -10,8 +10,18 @@ exports.totalStudents = function(callback) {
 };
 
 // @param {function} callback (string err, int count)
+exports.totalAdmins = function(callback) {
+    User.count({acl: {$ne: 0}}, callback);
+};
+
+// @param {function} callback (string err, int count)
 exports.totalProjects = function(callback) {
-    Project.count({}, callback); // need to back out projects by admins, not as easy with Mongo/NoSQL without joins
+    Project.count({}, callback);
+};
+
+// @param {function} callback (string err, int count)
+exports.totalLessons = function(callback) {
+    Lesson.count({}, callback);
 };
 
 // @param {string} id
@@ -32,7 +42,13 @@ exports.userDetails = function(id, callback) {
 
 // @param {function} callback
 exports.allStudents = function(callback) {
+    // todo add paging
     User.find({acl: 0}, callback);
+};
+
+// @param {function} callback
+exports.allAdmins = function(callback) {
+    User.find({acl: {$ne: 0}}, callback);
 };
 
 // @param {string} id

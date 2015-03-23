@@ -22,6 +22,8 @@ html
                             a(data-bind="", href="#") Chat
                         li(data-bind="css: { active: view() === PAGES.STUDENTS }")
                             a(data-bind="click: cstudents", href="#") Students
+                        li(data-bind="css: { active: view() === PAGES.ADMINS }")
+                            a(data-bind="click: cadmins", href="#") Admins
                         li(data-bind="css: { active: view() === PAGES.LESSONS }")
                             a(data-bind="click: clessons", href="#") Lessons
         h2.error(data-bind="visible: err, text: err")
@@ -35,14 +37,25 @@ html
         section.content(data-bind="visible: authenticated")
             section(data-bind="visible: view() === PAGES.DASHBOARD")
                 h2 Dashboard
-                h3 Students
-                ul.students(data-bind="foreach: students")
-                    li(data-bind="text: name, click: $parent.cstudent")
+                a.stat(href="#students", data-bind="click: cstudents, text: stats().students + ' Students'")
+                span.stat(data-bind="text: stats().projects + ' Projects'")
+                a.stat(href="#admins", data-bind="click: cadmins, text: stats().admins + ' Admins'")
+                a.stat(href="#lessons", data-bind="click: clessons, text: stats().lessons + ' Lessons'")
+                //- h3 Students
+                //- ul.students(data-bind="foreach: students")
+                //-     li(data-bind="text: name, click: $parent.cstudent")
 
             section(data-bind="visible: view() === PAGES.STUDENTS")
                 h2 Students
                 ul.students(data-bind="foreach: students")
                     li(data-bind="text: name, click: $parent.cstudent")
+
+            section(data-bind="visible: view() === PAGES.ADMINS")
+                h2 Admin Users
+                ul.students(data-bind="foreach: admins")
+                    li(data-bind="text: name")
+
+            iframe#sandbox(data-bind="visible: (view() === PAGES.PROJECT || view() === PAGES.LESSON)", class="sandbox", src="/canvas", width="500", height="500", scrolling="off")
 
             section(data-bind="visible: view() === PAGES.STUDENT && student")
                 h2(data-bind="text: student() && student().name") Student
@@ -69,14 +82,17 @@ html
                 h3 Source
                 pre(data-bind="text: lesson() && lesson().source")
 
+        //- todo require.js and minification
         script(src="/components/jquery/dist/jquery.js")
         script(src="/components/lodash/lodash.min.js")
         script(src="/components/knockout/dist/knockout.js")
-        //- script(src="/components/easyModal.js/jquery.easyModal.js")
-        script(type="text/javascript", src="/components/marked/lib/marked.js")
+        script(src="/components/jshint/dist/jshint.js")
+        script(src="/components/marked/lib/marked.js")
         script(src="/js/state.js")
-        script(src="/js/dom/komodels.js")
-        script(src="/js/dom/adminvm.js")
         script(src="/js/admin.js")
         script(src="/js/auth.js")
         script(src="/js/repo.js")
+        script(src="/js/code.js")
+        script(src="/js/dom/stage.js")
+        script(src="/js/dom/komodels.js")
+        script(src="/js/dom/adminvm.js")

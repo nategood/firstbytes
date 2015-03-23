@@ -11,19 +11,29 @@
         CHAT: 4,
         LESSONS: 5,
         STUDENTS: 6,
-        LESSON: 7
+        LESSON: 7,
+        ADMINS: 8,
     };
     g.PAGES = PAGES;
 
     function AdminViewModel() {
-        var self, initSession, restoreSession, clearSession;
+        var self, initSession, restoreSession, clearSession, pushCode, getStats, canvas;
         self = this;
+
+        canvas = stage('#sandbox');
 
         self.user = ko.observable(null);
         self.session = ko.observable(null);
         self.students = ko.observableArray([]);
+        self.admins = ko.observableArray([]);
         self.err = ko.observable(false);
         self.lessons = ko.observableArray([]);
+        self.stats = ko.observable({
+            students: '-',
+            admins: '-',
+            projects: '-',
+            lessons: '-'
+        });
 
         // currently selected student / projects
         self.student = ko.observable(null);
@@ -52,6 +62,17 @@
             self.session(null);
             self.user(null);
         };
+        pushCode = function(source) {
+            canvas.publishCode(Code().prep(source));
+        };
+        getStats = function() {
+            if (!self.session()) return;
+            var token = self.session().token();
+            if (!token) return;
+            repo.fetchStats(token, function(err, stats) {
+                self.stats(stats);
+            });
+        };
         g.restoreSession = restoreSession;
 
         self.cformlogin = function(form) {
@@ -77,22 +98,35 @@
             repo.fetchProject(project._id, token, function(err, response) {
                 if (err || !response) return console.error(err); // todo messaging
                 self.project(response);
+                pushCode(self.project().source);
             });
         };
         self.clesson = function(project, e) {
             var token = self.session().token();
             self.view(PAGES.LESSON);
             repo.fetchLesson(project._id, token, function(err, response) { // todo DRY w cproject
-                // console.log(response);
                 if (err || !response) return console.error(err); // todo messaging
                 self.lesson(response);
+                pushCode(self.lesson().source);
             });
         };
         self.cdashboard = function() {
+            getStats();
             self.view(PAGES.DASHBOARD);
         };
         self.cstudents = function() {
+            fetchStudents(self.session().token(), function(err, students) {
+                if (err) return adminvm.err(err);
+                self.students(students);
+            });
             self.view(PAGES.STUDENTS);
+        };
+        self.cadmins = function() {
+            fetchAdmins(self.session().token(), function(err, admins) {
+                if (err) return adminvm.err(err);
+                self.admins(admins);
+            });
+            self.view(PAGES.ADMINS);
         };
         self.clessons = function() {
             self.view(PAGES.LESSONS);
@@ -107,7 +141,6 @@
         };
 
         // todo build in a hook that listens for "view" changes and adds to push state
-
     }
 
     // Main View Model
@@ -115,6 +148,7 @@
 
     $(function() {
         ko.applyBindings(g.adminvm);
+        g.adminvm.cdashboard();
     });
 
 })(window);

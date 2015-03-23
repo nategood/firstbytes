@@ -23,7 +23,8 @@ var routes = {
   admin: require('../routes/admin'),
   user: require('../routes/user'),
   project: require('../routes/project'),
-  lesson: require('../routes/lesson')
+  lesson: require('../routes/lesson'),
+  stats: require('../routes/stats'),
 };
 
 var ERR_MUST_AUTHENTICATE = 'You must authenticate';
@@ -52,7 +53,7 @@ if (env === 'development') {
   app.set('data.redis', {host: '127.0.0.1', port: '9491', disableTTL: true});
 }
 
-if (env === 'testing') {
+if (env === 'test') {
   // app.use(express.errorHandler());
   app.set('data.store', 'mongo');
   app.set('data.mongo', 'mongodb://localhost:27017/firstbytes-test');
@@ -95,6 +96,9 @@ var redirectIfNoAuth = function (req, res, next) {
   res.redirect('/#login');
 };
 
+// Middleware
+app.use(routes.user.authAdminCheck);
+
 // page routes
 app.get('/', routes.main.index);
 app.get('/canvas/?', routes.main.canvas);
@@ -117,10 +121,12 @@ app.post('/user/auth/', routes.user.auth);
 app.post('/user/', routes.user.create);
 app.get('/user/:id/', routes.user.authFromToken);
 app.get('/users/', routes.user.allStudents);
-// app.put('/user/:id/', routes.user.?);
+app.get('/users/admins/', routes.user.allAdmins);
 
 app.get('/user/:id/projects/', routes.user.projects);
 // app.get('/user/:id/projects/public/', routes.user.publicprojects);
+
+app.get('/stats/overall/', routes.stats.overall);
 
 app.get('/lesson/:id/', routes.lesson.get);
 app.get('/lessons/:category/', routes.lesson.getByCategory);
@@ -136,10 +142,8 @@ var listen = function() {
 var connected = false;
 var connect = function() {
   if (connected === true) return;
-  // console.log('Connecting to data source...');
   db.connect(app.get('data.mongo'));
   connected = true;
-  // console.log('Connected');
 };
 var disconnect = function() {
   db.disconnect();
