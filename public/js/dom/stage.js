@@ -6,7 +6,7 @@ var stage = function(selector) {
             var l = window.location;
             var origin = l.protocol + '//' + l.host;
             win.postMessage(JSON.stringify(payload), origin);
-            // console.debug('Sending code: ', payload);
+            console.debug('Sending code: ', payload);
             // todo listen for errors coming back from iframe
     };
     var publishCode = function(code) {
@@ -43,5 +43,8 @@ var stage = function(selector) {
 
 // tmp hack because the postMessage return messing is not working?
 var saveScreenshot = function(data) {
-    // console.log("PQ", data);
+    console.log("Screenshot received", data);
+    repo.saveScreenshot(token, data, function() {
+        console.log("Screenshot save", arguments);
+    });
 };

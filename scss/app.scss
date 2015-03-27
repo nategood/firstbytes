@@ -52,6 +52,7 @@ h1, h2, h3, h4 {
 
 section.content {
     padding: $pad;
+    // display: none; // doesn't play nicely with knockout's visible
 }
 
 #sandbox {

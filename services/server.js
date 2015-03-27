@@ -25,6 +25,7 @@ var routes = {
   project: require('../routes/project'),
   lesson: require('../routes/lesson'),
   stats: require('../routes/stats'),
+  screenshots: require('../routes/screenshot')
 };
 
 var ERR_MUST_AUTHENTICATE = 'You must authenticate';
@@ -103,7 +104,6 @@ app.use(routes.user.authAdminCheck);
 app.get('/', routes.main.index);
 app.get('/canvas/?', routes.main.canvas);
 app.get('/stage/:id/', routes.main.stage);
-// 5456a64a4821d40000c092c8
 // app.get('/login/', routes.main.login);
 // app.get('/setup/', routes.main.setup);
 
@@ -116,6 +116,8 @@ app.post('/project/', routes.project.create);
 
 // app.get('/project/:id/revisions/', routes.project.create);
 app.post('/project/:id/revisions/', routes.project.saveRevision);
+
+app.get('/projects/examples/:keyword/', routes.project.searchPublicProjects);
 
 app.post('/user/auth/', routes.user.auth);
 app.post('/user/', routes.user.create);

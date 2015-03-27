@@ -3,6 +3,8 @@ extends main
 block content
     style.
         @import url("/css/form.css");
+    style.
+        @import url("/css/font.css");
     //- header First Bytes Society - Editor
     nav#menu
         div.error(data-bind="text: err, visible: err")
@@ -12,16 +14,33 @@ block content
                 input#projectname(placeholder="Project Name", data-bind="value: project() && project().name, visible: !project().lesson()")
             li(data-bind="visible: !!project().lesson()",style="color:#ccc") Lesson:
             li(data-bind="text: project() && project().name, visible: !!project().lesson()")
-            li.button#save(data-bind="click: csave") Save
-            li.button#share(data-bind="visible: authenticated, click: cshare") Share
-            //- todo don't allow sharing when its a lesson. visible isn't respecting and / or.
-            li.button#delete(data-bind="visible: authenticated, click: cdelete") Delete
+            li.button#save(data-bind="click: csave")
+                span(aria-hidden="true", class="icon icon-floppy-disk")
+                span &nbsp; Save
+            li.button#share(data-bind="visible: authenticated, click: cshare")
+                span(aria-hidden="true", class="icon icon-link")
+                span &nbsp; Share
+            //- li.button#delete(data-bind="visible: authenticated, click: cdelete")
+            //-     span(aria-hidden="true", class="icon icon-bin")
+            li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot")
+                span(aria-hidden="true", class="icon icon-camera")
+                span &nbsp; Pic
+            li.button#add-button(data-bind="visible: authenticated, click: cnewproject")
+                span(aria-hidden="true", class="icon icon-plus")
+                span &nbsp; New
             //- li.button#revert Revert
-            //- li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot") Snap a Picture
-            li.button#projects-button(data-bind="visible: authenticated, click: cshowprojects") My Projects
-            li.button#lessons-button(data-bind="visible: authenticated, click: cshowlessons") Lessons
-            li.button#logout-button(data-bind="visible: authenticated, click: cnewproject") New Project
-            li.button#reference-button(data-bind="click: cshowreference") The Manual
+            li.button#projects-button(data-bind="visible: authenticated, click: cshowprojects")
+                span(aria-hidden="true", class="icon icon-list")
+                span &nbsp; My Stuff
+            li.button#lessons-button(data-bind="visible: authenticated, click: cshowlessons")
+                span(aria-hidden="true", class="icon icon-pencil")
+                span &nbsp; Lessons
+            li.button#explore-button(data-bind="click: cshowexplorer")
+                span(aria-hidden="true", class="icon icon-binoculars")
+                span &nbsp; Explore
+            li.button#reference-button(data-bind="click: cshowreference")
+                span(aria-hidden="true", class="icon icon-info")
+                span &nbsp; Book
             li#save-status(data-bind="text: saveStatus") --
 
             li(data-bind="text: username")
@@ -58,11 +77,15 @@ block content
                     input(name="email", placeholder="Email", autocomplete="off")
                     input(name="password", placeholder="Password", autocomplete="off", type="password")
                     button(type="submit") Sign In
-        //- h3 or
     div#projects.modal(data-bind="visible: showprojects")
         h1 Projects
         ul.clickable(data-bind="foreach: projects")
             li(data-bind="text: name, click: $parent.cprojectselect")
+    div#explorer.modal(data-bind="visible: showexplorer")
+        h1 Explore Examples
+        //- input(type="search")
+        ul.clickable(data-bind="foreach: examples")
+            li(data-bind="text: name, click: $parent.cprojectclone")
     div#lessons.modal(data-bind="visible: showlessons")
         h1 Lessons
         ul.clickable(data-bind="foreach: lessons")

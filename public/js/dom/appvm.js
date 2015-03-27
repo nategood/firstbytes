@@ -24,6 +24,7 @@
         self.user = ko.observable(null); //new User({email: "asdlfkjals"})
         self.projects = ko.observableArray([]); // don't bother making these actual "Project" instances
         self.lessons = ko.observableArray([]);
+        self.examples = ko.observableArray([]);
         // self.editor = ko.observable(new Editor({}));
         self.username = ko.computed(function() {
             return self.user() ? self.user().name() : L.DEFAULT_USERNAME_TEXT;
@@ -49,7 +50,7 @@
         });
 
         // modals. these feel awkward here.
-        modals = ['showlogin', 'showprojects', 'showlessons', 'showreference'];
+        modals = ['showlogin', 'showprojects', 'showlessons', 'showreference', 'showexplorer'];
         for (var i in modals) {
             self[modals[i]] = ko.observable(false);
         }
@@ -140,12 +141,32 @@
             self.project(new Project(project));
             self.chidemodal();
         };
+        self.cprojectclone = function(project) {
+            var clone = _.cloneDeep(project);
+
+            project.name = 'Copy of ' + project.name;
+            project.privacy = 2;
+            project.parent = project._id;
+
+            delete project._id;
+            delete project.userId;
+            delete project.created;
+
+            self.project(new Project(project));
+            self.chidemodal();
+        };
         self.cshowlessons = function() {
             // Only fetch the Intro lessons for now
             repo.fetchLessons('Intro', function(err, lessons) {
                 self.lessons(lessons);
             });
             self.showlessons(true);
+        };
+        self.cshowexplorer = function() {
+            repo.fetchExamples('intro', function(err, examples) {
+                self.examples(examples);
+            });
+            self.showexplorer(true);
         };
         self.clessonselect = function(lesson) {
             self.project(new Project({

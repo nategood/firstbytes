@@ -24,7 +24,10 @@ var schema = mongoose.Schema({
     userId: {type: String},
     state: {type: Number, default: STATE.WIP},
     privacy: {type: Number, default: PRIVACY.PRIVATE},
-    lesson: {type: String} // reference id of the lesson this is built from
+    lesson: {type: String}, // reference id of the lesson this is built from
+    tags: [{type: String}],
+    parent: Number, // if clone, the parent project cloned from
+    screenshot: String // data uri (for now... super ineffecient but convenient)
 });
 
 var editable = ['name', 'source', 'state', 'userId', 'privacy', 'lesson', '_id'];

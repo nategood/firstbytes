@@ -60,7 +60,7 @@ nav ul {
 
 nav ul li {
   display: inline-block;
-  font-size: 17px;
+  font-size: 15px;
   /*letter-spacing: 1px;*/
   padding: 5px;
   /*text-transform: uppercase;*/
@@ -82,8 +82,19 @@ nav .right {
   float: right;
 }
 
+.icon {
+  color: #999;
+}
+
 li.button#delete {
   background: darkred;
+}
+
+#projectname {
+  font-size: 14px;
+  width: 150px;
+  padding: 2px;
+  border: none;
 }
 
 /* Modals */

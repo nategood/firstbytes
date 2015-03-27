@@ -109,3 +109,13 @@ exports.getRevisions = function(req, res) {
         res.json(revisions); // may also be an empty array
     });
 };
+
+// GET /project/examples/KEYWORD/
+exports.searchPublicProjects = function(req, res) {
+    // for now... no keyword support
+    // var keyword = req.params.keyword;
+    Project.find({privacy: Project.PRIVACY.PUBLIC}, function(err, projects) {
+      if (err) return res.status(401).json({'error': err});
+      res.json(projects.map(function(p) { return p.toResponse(); } ));
+    });
+};

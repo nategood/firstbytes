@@ -93,7 +93,7 @@ var Manual = {
         {
             name: "background(r, g, b, a*)",
             caption: "background(r, g, b, a*)",
-            value: "background(255, 0, 0);",
+            value: "background(DARKBLUE);",
             type: "function",
             exampleURL: "/cs/backgroundr-g-b/839653892",
             description: $._("Sets the background color of the canvas. Note that calling this will color over anything drawn before the command."),
@@ -107,7 +107,7 @@ var Manual = {
         {
             name: "fill(r, g, b, a*)",
             caption: "fill(r, g, b, a*)",
-            value: "fill(255, 0, 0);",
+            value: "fill(ORANGE);",
             type: "function",
             exampleURL: "/cs/fillr-g-b/839774957",
             description: $._("Sets the fill color for all shapes drawn after the function call."),

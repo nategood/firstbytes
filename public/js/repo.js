@@ -168,6 +168,25 @@
         $.ajax(url, conf);
     };
 
+    // @param {string} keyword
+    // @param {function} callback (string err, array projects)
+    repo.fetchExamples = function(keyword, callback) {
+        var url, conf;
+        url = '/projects/examples/' + keyword + '/';
+        conf = {
+            type: 'get',
+            dataType: 'json',
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.GET_PROJECTS_ERROR);
+            }
+        };
+        // if (token) conf.headers = {'token': token};
+        $.ajax(url, conf);
+    };
+
     // @param {function} callback (string err, object lessons)
     repo.fetchLessons = function(category, callback) {
         var url;
@@ -211,6 +230,27 @@
             type: 'get',
             dataType: 'json',
             headers: {'token': token},
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.GET_ERROR);
+            }
+        });
+    };
+
+    // @param {string} token
+    // @param {object} data
+    // @param {function} callback
+    repo.saveScreenshot = function(token, data, callback) {
+        var url;
+        url = '/screenshot/';
+        $.ajax(url, {
+            type: 'post',
+            dataType: 'json',
+            headers: {'token': token},
+            contentType: 'application/json',
+            data: JSON.stringify(data),
             success: function(response, status, xhr) {
                 callback(null, response);
             },

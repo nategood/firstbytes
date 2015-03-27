@@ -51,7 +51,6 @@ exports.projects = function(req, res) {
     if (req.params.id != user._id && user.acl !== 1)  {
       return res.status(401).json({'error': L.NOPE}); // allow admins
     }
-    // console.log(req.params.id);
     Project.find({userId: req.params.id}, function(err, projects) {
       if (err) return res.status(401).json({'error': err});
       res.json(projects.map(function(p) { return p.toResponse(); } ));
