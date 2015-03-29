@@ -7,6 +7,7 @@ block content
         @import url("/css/font.css");
     //- header First Bytes Society - Editor
     nav#menu
+        div#cameraflash
         div.error(data-bind="text: err, visible: err")
         //- div.message(data-bind="text: message, visible: message")
         ul
@@ -17,12 +18,12 @@ block content
             li.button#save(data-bind="click: csave")
                 span(aria-hidden="true", class="icon icon-floppy-disk")
                 span &nbsp; Save
-            li.button#share(data-bind="visible: authenticated, click: cshare")
+            li.button#share(data-bind="visible: hasactiveproject, click: cshare")
                 span(aria-hidden="true", class="icon icon-link")
                 span &nbsp; Share
             //- li.button#delete(data-bind="visible: authenticated, click: cdelete")
             //-     span(aria-hidden="true", class="icon icon-bin")
-            li.button#screenshot(data-bind="visible: authenticated, click: cscreenshot")
+            li.button#screenshot(data-bind="visible: hasactiveproject, click: cscreenshot")
                 span(aria-hidden="true", class="icon icon-camera")
                 span &nbsp; Pic
             li.button#add-button(data-bind="visible: authenticated, click: cnewproject")
@@ -40,7 +41,7 @@ block content
                 span &nbsp; Explore
             li.button#reference-button(data-bind="click: cshowreference")
                 span(aria-hidden="true", class="icon icon-info")
-                span &nbsp; Book
+                span &nbsp; Help
             li#save-status(data-bind="text: saveStatus") --
 
             li(data-bind="text: username")
@@ -48,14 +49,16 @@ block content
             li.button.right#logout-button(data-bind="visible: authenticated, click: csignout") Sign Out
     iframe#sandbox(class="sandbox", src="/canvas", width="500", height="500", scrolling="off")
     div#editor.editor(data-bind="style: { height: !!project().lesson() ? '250px' : '500px'}")
-    div#instructions.instructions(data-bind="visible: !!project().lesson()")
+    div#instructions.instructions(data-bind="visible: !!project().lesson() && lesson()")
         div
-            h1(data-bind="text: project() && (project().name() + ' Instructions')")
-            p(data-bind="html: project() && project().instructions")
+            h1(data-bind="text: lesson() && (lesson().name + ' Instructions')")
+            p(data-bind="html: lesson() && lesson().instructions")
     //- div#chat.chat
     div#overlay.overlay(data-bind="visible: showmodal, click: chidemodal")
     div.overlay(data-bind="visible: showloading")
     div.overlay-text(data-bind="visible: showloading") Loading...
+    div#screenshotViewer.modal(style="background: none; text-align: center; padding: 0", data-bind="visible: showscreenshot")
+        img(style="margin: auto; border: solid 20px #fff; box-shadow: 0 0 10px #666666;", data-bind="visible: !!screenshot(), attr: {src: screenshot() && screenshot().data} ")
     div#login.modal(data-bind="visible: showlogin")
         div.error(data-bind="text: err, visible: err")
         h1 Sign In or Create an Account
@@ -80,16 +83,25 @@ block content
     div#projects.modal(data-bind="visible: showprojects")
         h1 Projects
         ul.clickable(data-bind="foreach: projects")
-            li(data-bind="text: name, click: $parent.cprojectselect")
+            li(data-bind="click: $parent.cprojectselect")
+                img(style="width: 50px; height: 50px;", data-bind="attr: { src: screenshot.toString() !== '[object HTMLLIElement]' ? screenshot : '/img/notavailable.png' }")
+                span(data-bind="text: name")
+        div.clear
     div#explorer.modal(data-bind="visible: showexplorer")
         h1 Explore Examples
         //- input(type="search")
         ul.clickable(data-bind="foreach: examples")
-            li(data-bind="text: name, click: $parent.cprojectclone")
+            li(data-bind="click: $parent.cprojectclone")
+                img(style="width: 50px; height: 50px;", data-bind="attr: { src: screenshot.toString() !== '[object HTMLLIElement]' ? screenshot : '/img/notavailable.png' }")
+                span(data-bind="text: name")
+        div.clear
     div#lessons.modal(data-bind="visible: showlessons")
         h1 Lessons
         ul.clickable(data-bind="foreach: lessons")
-            li(data-bind="text: name, click: $parent.clessonselect")
+            li(data-bind="click: $parent.clessonselect")
+                img(style="width: 50px; height: 50px;", data-bind="attr: { src: screenshot.toString() !== '[object HTMLLIElement]' ? screenshot : '/img/notavailable.png' }")
+                span(data-bind="text: name")
+        div.clear
     div#reference.modal(data-bind="visible: showreference")
         h1 The Sandbox Manual
         //- input(type="search", placeholder="Search Manual")

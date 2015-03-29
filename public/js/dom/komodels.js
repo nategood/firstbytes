@@ -17,6 +17,7 @@ function Project(data) {
     this.privacy = ko.observable(data.privacy);
     this.lesson = ko.observable(data.lesson);
     this.instructions = ko.observable(data.instructions);
+    this.screenshot = ko.observable(data.screenshot);
 }
 // function Editor(data) {
 //     this.dirty = ko.observable(data.dirty);

@@ -76,8 +76,10 @@ $(function() {
             backgroundSavePrevious = appvm.project().source();
             return;
         }
+        stageCanvas.publishProjectPreview();
         if (backgroundSavePrevious !== appvm.project().source() && appvm.authenticated() && appvm.dirty()) {
             backgroundSavePrevious = appvm.project().source();
+
             var revision = {
                 projectId: appvm.project()._id(),
                 source: appvm.project().source()
@@ -85,7 +87,7 @@ $(function() {
                 // err: errors
             };
             repo.saveRevision(appvm.user()._id(), appvm.session().token(), revision, function(err, revision) {
-                console.log(err, revision);
+                // console.log(err, revision);
                 backgroundSavePreviousTime = new Date();
             });
         }

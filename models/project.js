@@ -30,7 +30,7 @@ var schema = mongoose.Schema({
     screenshot: String // data uri (for now... super ineffecient but convenient)
 });
 
-var editable = ['name', 'source', 'state', 'userId', 'privacy', 'lesson', '_id'];
+var editable = ['name', 'source', 'state', 'userId', 'screenshot', 'privacy', 'lesson', '_id'];
 schema.methods.getEditable = function() { return editable; };
 schema.methods.toResponse = utils.toResponse(editable);
 

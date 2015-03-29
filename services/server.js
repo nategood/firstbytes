@@ -128,6 +128,9 @@ app.get('/users/admins/', routes.user.allAdmins);
 app.get('/user/:id/projects/', routes.user.projects);
 // app.get('/user/:id/projects/public/', routes.user.publicprojects);
 
+app.get('/screenshot/:id/', routes.screenshots.get);
+app.post('/screenshot/', routes.screenshots.create);
+
 app.get('/stats/overall/', routes.stats.overall);
 
 app.get('/lesson/:id/', routes.lesson.get);

@@ -20,12 +20,11 @@
 
         self = this;
 
-        self.session = ko.observable(null); // new Session({})
-        self.user = ko.observable(null); //new User({email: "asdlfkjals"})
+        self.session = ko.observable(null);
+        self.user = ko.observable(null);
         self.projects = ko.observableArray([]); // don't bother making these actual "Project" instances
         self.lessons = ko.observableArray([]);
         self.examples = ko.observableArray([]);
-        // self.editor = ko.observable(new Editor({}));
         self.username = ko.computed(function() {
             return self.user() ? self.user().name() : L.DEFAULT_USERNAME_TEXT;
         });
@@ -37,6 +36,8 @@
         self.message = ko.observable(null);
         self.saveStatus = ko.observable('');
         self.lastSaved = ko.observable(null);
+        self.lesson =  ko.observable(null); // pojo, not ko obervable object
+        self.screenshot = ko.observable(null);
 
         self.showloading = ko.observable(true);
 
@@ -49,8 +50,12 @@
             self.lastSaved(null);
         });
 
+        self.hasactiveproject = ko.computed(function() {
+            return self.authenticated() && !!self.project() && !!self.project()._id();
+        });
+
         // modals. these feel awkward here.
-        modals = ['showlogin', 'showprojects', 'showlessons', 'showreference', 'showexplorer'];
+        modals = ['showlogin', 'showprojects', 'showlessons', 'showreference', 'showexplorer', 'showscreenshot'];
         for (var i in modals) {
             self[modals[i]] = ko.observable(false);
         }
@@ -132,7 +137,6 @@
             }
             // fire off a request async - ideally have a loading state
             repo.fetchAll(self.user()._id(), self.session().token(), function(err, projects) {
-                // force attributes
                 self.projects(projects);
             });
             self.showprojects(true);
@@ -176,6 +180,7 @@
                 instructions: marked(lesson.instructions), // convert to html
                 userId: self.user()._id() // server side will validate
             }));
+            self.lesson(lesson);
             self.chidemodal();
         };
         self.cshowreference = function() {
@@ -200,7 +205,8 @@
         self.cshare = function() {
             if (!self.project()) return;
             var id = self.project()._id();
-            window.location.href = "/stage/" + id;
+            // window.location.href = "/stage/" + id;
+            window.open("/stage/" + id);
         };
         self.csave = function() {
             if (self.authenticated()) {

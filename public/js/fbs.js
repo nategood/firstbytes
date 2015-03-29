@@ -5,7 +5,7 @@
 // have a fair amount of clean up to do here, but 'working'
 $(function() {
     var canvas, $body, channels;
-    var onCode, onScreenshot;
+    var onCode, onScreenshot, onProjectPreview;
     window.kill = function() {}; // global hack for now
     canvas = $('#canvas').get(0);
     $body = $('body');
@@ -24,11 +24,17 @@ $(function() {
 
     onScreenshot = function(msg, payload) {
         var data;
-        console.debug('Screenshot Request Received: ' + msg.data);
-        console.log(msg.source.saveScreenshot);
+        // console.debug('Screenshot Request Received: ' + msg.data);
         data = getScreenshot();
         // msg.source.postMessage(data, msg.origin);
         msg.source.saveScreenshot(data); // hack because ^ wasn't cooperating
+    };
+
+    onProjectPreview = function(msg, payload) {
+        // Similar to screenshot, but doesn't fire the animation or popup window
+        // Instead saves the screenshot with the project as a preview for the project
+        var data = getScreenshot();
+        msg.source.saveProjectPreview(data);
     };
 
     var duri = function(src) {
@@ -40,7 +46,8 @@ $(function() {
 
     channels = {
         'code': onCode,
-        'screenshot': onScreenshot
+        'screenshot': onScreenshot,
+        'projectpreview': onProjectPreview
     };
 
     $(window).on('message', function(msg) {

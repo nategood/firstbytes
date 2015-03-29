@@ -6,7 +6,7 @@ var schema = mongoose.Schema({
     created: {type: Date, default: Date.now},
     userId: String,
     projectId: String,
-    data: {type: String}
+    data: {type: String, required: true}
 });
 
 var editable = ['name', 'userId', 'projectId', 'data', '_id'];

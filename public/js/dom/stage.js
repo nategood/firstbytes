@@ -6,7 +6,7 @@ var stage = function(selector) {
             var l = window.location;
             var origin = l.protocol + '//' + l.host;
             win.postMessage(JSON.stringify(payload), origin);
-            console.debug('Sending code: ', payload);
+            // console.debug('Sending code: ', payload);
             // todo listen for errors coming back from iframe
     };
     var publishCode = function(code) {
@@ -19,14 +19,18 @@ var stage = function(selector) {
         };
         return publish(payload);
     };
-    var publishScreenshotIntent = function(code) {
+    var publishScreenshotIntent = function() {
         // todo clear up this try catch wrapper to be more useful
         // and especially for passing it back to the parent (out of iframe)
         // doesn't help with syntax errors...
-        var payload = {
+        return publish({
             type: 'screenshot'
-        };
-        return publish(payload);
+        });
+    };
+    var publishProjectPreview = function() {
+        return publish({
+            type: 'projectpreview'
+        });
     };
 
     $(window).on('message', function(msg) {
@@ -37,14 +41,33 @@ var stage = function(selector) {
     return {
         publish: publish,
         publishCode: publishCode,
-        publishScreenshotIntent: publishScreenshotIntent
+        publishScreenshotIntent: publishScreenshotIntent,
+        publishProjectPreview: publishProjectPreview
     };
 };
 
 // tmp hack because the postMessage return messing is not working?
+// not crazy about this living here and touching appvm state
 var saveScreenshot = function(data) {
-    console.log("Screenshot received", data);
-    repo.saveScreenshot(token, data, function() {
-        console.log("Screenshot save", arguments);
+    flashCamera();
+    if (!appvm.session()) return;
+    var payload = {
+        userId: appvm.user()._id(),
+        projectId: appvm.project()._id(),
+        data: data
+    };
+    repo.saveScreenshot(appvm.session().token(), payload, function(err, screenshot) {
+        appvm.screenshot(screenshot);
+        appvm.showscreenshot(true);
+        // console.log("Screenshot save", arguments);
     });
+};
+
+var saveProjectPreview = function(data) {
+    if (!appvm.session() || !appvm.project()) return;
+    appvm.project().screenshot(data);
+};
+
+var flashCamera = function() {
+    $("#cameraflash").css("display", "block").fadeOut(1000);
 };
