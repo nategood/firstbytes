@@ -1,6 +1,10 @@
 @import "settings";
 @import "foundation";
 
+$body-font-family: Times, Arial;
+// $primary-color: ;
+// $secondary-color:
+
 // Or selectively include components
 // @import
 //   "foundation/components/accordion",
@@ -39,7 +43,7 @@
 //   "foundation/components/offcanvas",
 //   "foundation/components/visibility";
 
-$pad: 20px;
+$pad: 20px; // consider changing to rem to match foundation css units
 
 body {
     background: #222;
@@ -47,7 +51,17 @@ body {
 }
 
 h1, h2, h3, h4 {
-    color: #fff;
+    // font-family: 'Codystar';
+    font-weight: normal;
+    color: $secondary-color;
+}
+
+header h1 {
+  font-family: 'Codystar';
+  background: #3e3e3e;
+  color: #fff;
+  margin: 0;
+  padding: 0 0.9375rem;
 }
 
 section.content {
@@ -64,4 +78,14 @@ section.content {
     display: block;
     font-size: 24px;
     color: #eee;
+}
+
+dl.sub-nav {
+    background: #333;
+    padding: 0.25rem 0;
+}
+dl.sub-nav dd a {
+    // color: $primary-color;
+    color: #fff;
+    font-size: 0.75rem;
 }

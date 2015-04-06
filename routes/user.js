@@ -6,25 +6,33 @@
 var uuid = require('node-uuid');
 var User = require('../models/user');
 var Project = require('../models/project');
+var Screenshot = require('../models/screenshot');
 var auth = require('../services/auth/user-auth');
 var modelRoute = require('../routes/_model');
 var stats = require('../services/stats');
 
-var createSession, L, restricted;
+var createSession, L, restrictedAdminOnly, restrictedAdminOrSelf;
 
 L = {
   NOPE: 'Unauthorized – Must be an admin user',
+  MISSING: 'Missing required field'
 };
 
-restricted = {
+// We check against the templatized path, e.g. /user/:id/
+// These are the routes that require admin access to hit
+restrictedAdminOnly = {
   '/stats/overall/': true,
   '/users/': true,
-  '/users/admins/': true
+  '/users/admins/': true,
+  '/user/:id/password/': true
+};
+restrictedAdminOrSelf = {
+  '/user/:id/': true,
 };
 
+// Requires Admin ACL
 // GET /users/
 exports.allStudents = function(req, res) {
-    // todo require auth
     stats.allStudents(function(err, students) {
         if (err) return res.status(400).json({'error': err});
         var data = students.map(function(s) { return s.toResponse(); });
@@ -32,9 +40,9 @@ exports.allStudents = function(req, res) {
     });
 };
 
-// GET /admins/
+// Requires Admin ACL
+// GET /users/admins/
 exports.allAdmins = function(req, res) {
-    // todo require auth
     stats.allAdmins(function(err, admins) {
         if (err) return res.status(400).json({'error': err});
         var data = admins.map(function(s) { return s.toResponse(); });
@@ -46,7 +54,6 @@ exports.allAdmins = function(req, res) {
 exports.projects = function(req, res) {
   // don't check against user id in auth call because we'll allow admins access
   auth.getAndAssertUserFromRequest(req, false, function(err, user) {
-    // console.log(req.params.id, err);
     if (err) return res.status(401).json({'error': err});
     if (req.params.id != user._id && user.acl !== 1)  {
       return res.status(401).json({'error': L.NOPE}); // allow admins
@@ -85,6 +92,36 @@ exports.create = function(req, res) {
   });
 };
 
+// Requires Admin ACL or Updating current logged in user
+// todo prevent updating other admins
+// PUT, POST /user/:id/
+exports.update = function(req, res) {
+  if (!req.body.name || !req.body.email) return res.status(400).json({'error': L.MISSING});
+  auth.getUser(req.params.id, function(err, user) {
+    console.log(user);
+    if (err) return res.status(404).json({'error': err});
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.save(function(err, saved) {
+      if (err) return res.status(400).json({'error': err});
+      res.json({'user': saved.toResponse()});
+    });
+  });
+};
+
+// Requires Admin ACL
+// POST /user/:id/password/
+exports.changePassword = function(req, res) {
+  auth.getUser(req.params.id, function(err, user) {
+    if (err) return res.status(404).json({'error': err});
+    user.password = req.body.password;
+    user.save(function(err, saved) {
+      if (err) return res.status(400).json({'error': err});
+      res.json({'user': user.toResponse()});
+    });
+  });
+};
+
 // GET /user/ID
 exports.authFromToken = function(req, res) {
   auth.getAndAssertUserFromRequest(req, req.params.id, function(err, user) {
@@ -93,12 +130,24 @@ exports.authFromToken = function(req, res) {
   });
 };
 
+// Middleware for checking if user is an admin user
 exports.authAdminCheck = function(req, res, next) {
+  // We check against the templatized path, e.g. /user/:id/
+  var path = req.route ? req.route.path : req.path;
   var token = req.get('token');
-  if (!(req.path in restricted)) return next();
+  var adminOnly = path in restrictedAdminOnly;
+  var adminSelf = path in restrictedAdminOrSelf;
+  if (!adminOnly && ! adminSelf) return next();
   var userId = req.session[token];
   if (!token || !userId) return res.status(401).json({error: L.NOPE});
-  auth.fetchUserAndCheckPermission(userId, 'TBD', function(err, user) {
+  if (adminSelf) { // allow access if :id param matches currently logged in user
+    if (!req.param.id) return res.status(401).json({error: L.NOPE});
+    auth.getAndAssertUserFromRequest(req, req.params.id, function(err, user) {
+      if (err) return res.status(400).json({'error': err});
+      next();
+    });
+  }
+  auth.fetchUserAndCheckPermission(userId, 'tbd-granular-permissions-not-supported-yet', function(err, user) {
     if (err) return res.status(401).json({error: L.NOPE});
     next();
   });

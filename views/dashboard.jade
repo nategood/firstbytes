@@ -3,13 +3,17 @@
 html
     head
         title First Bytes Society - Admin
-        style(type="text/css").
-            @import url('/css/app.css');
+        link(href="https://fonts.googleapis.com/css?family=Codystar", rel="stylesheet", type="text/css")
+        link(href="https://fonts.googleapis.com/css?family=Lato", rel="stylesheet", type="text/css")
+        link(href="/css/app.css", rel="stylesheet", type="text/css")
         style(type="text/css").
             ul.students li { cursor: pointer; }
     body
         header
-            h1 First Bytes Society - Admin
+            div(style="text-align: center; padding: 10px 0; background: #3e3e3e")
+                img(src="/img/fbs-mark.svg", style="height: 25px; width: 50px")
+            //- h1
+                //- span First Bytes Society Admin
             nav.top-bar(data-topbar, role="navigation")
                 section.top-bar-section
                     ul.right
@@ -26,8 +30,8 @@ html
                             a(data-bind="click: cadmins", href="#") Admins
                         li(data-bind="css: { active: view() === PAGES.LESSONS }")
                             a(data-bind="click: clessons", href="#") Lessons
-        h2.error(data-bind="visible: err, text: err")
-
+        div.alert-box.alert(data-bind="visible: err, text: err")
+        div.alert-box(data-bind="visible: message, text: message")
         section.content(data-bind="visible: unauthenticated")
             form(id="login-form", method="post", class="simple", action="#", data-bind="submit: cformlogin")
                 input(name="email", placeholder="Email", autocomplete="off", type="email")
@@ -37,13 +41,11 @@ html
         section.content(data-bind="visible: authenticated")
             section(data-bind="visible: view() === PAGES.DASHBOARD")
                 h2 Dashboard
+                //- this is ugly. clean this up into a better presentation.
                 a.stat(href="#students", data-bind="click: cstudents, text: stats().students + ' Students'")
                 span.stat(data-bind="text: stats().projects + ' Projects'")
                 a.stat(href="#admins", data-bind="click: cadmins, text: stats().admins + ' Admins'")
                 a.stat(href="#lessons", data-bind="click: clessons, text: stats().lessons + ' Lessons'")
-                //- h3 Students
-                //- ul.students(data-bind="foreach: students")
-                //-     li(data-bind="text: name, click: $parent.cstudent")
 
             section(data-bind="visible: view() === PAGES.STUDENTS")
                 h2 Students
@@ -57,16 +59,41 @@ html
 
             iframe#sandbox(data-bind="visible: (view() === PAGES.PROJECT || view() === PAGES.LESSON)", class="sandbox", src="/canvas", width="500", height="500", scrolling="off")
 
+            //- Student Details
             section(data-bind="visible: view() === PAGES.STUDENT && student")
                 h2(data-bind="text: student() && student().name") Student
-                span(data-bind="text: projects().length + ' projects'")
+                dl.admin-nav.sub-nav
+                    dd.round
+                        a(href="#", data-bind="click: cshowupdateaccount") Update Account
+                        a(href="#", data-bind="click: cshowchangepassword") Change Password
+                form(action="#", data-bind="visible: showchangepassword(), submit: cformchangepassword")
+                    div.row.collapse(style="width: 500px; margin: 0")
+                        div.small-9.columns
+                            input(name="password", id="newpassword", type="password", placeholder="New Password")
+                        div.small-3.columns
+                            button.button.postfix(type="submit") Set Password
+                form(action="#", data-bind="visible: showupdateaccount(), submit: cformupdateaccount")
+                    input(name="name", id="student-name", type="text", data-bind="value: student() && student().name")
+                    input(name="email", id="student-email", type="text", data-bind="value: student() && student().email")
+                    button.button(type="submit") Update
+
+                //- h4(data-bind="text: student().created()") // we don't store it locally yet. need to decouple view/edit on api.
+                h4(data-bind="text: projects().length + ' projects'")
+
                 ul(data-bind="foreach: projects")
                     li(data-bind="text: name, click: $parent.cproject")
 
+            //- Project Details
             section(data-bind="visible: view() === PAGES.PROJECT && project")
                 h2(data-bind="text: project() && ('Project: ' + project().name)")
-                //- a(data-bind="text") todo href support # and push state
-                h3 Source
+                dl.admin-nav.sub-nav
+                    dd.round
+                        a(href="#", target="_blank", data-bind="{attr: {href: (project() && '/stage/' + project()._id + '/')}}") Share Link
+                    //- dd.round
+                    //-     a(href="#", data-bind="click: cshowchangepassword") Snap Pic
+                    //- dd.round
+                    //-     a(href="#", data-bind="click: cshowchangepassword") Delete
+                h4 Source
                 pre(data-bind="text: project() && project().source")
 
             section(data-bind="visible: view() === PAGES.LESSONS && lessons")

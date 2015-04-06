@@ -26,6 +26,7 @@
         self.session = ko.observable(null);
         self.students = ko.observableArray([]);
         self.admins = ko.observableArray([]);
+        self.message = ko.observable(false);
         self.err = ko.observable(false);
         self.lessons = ko.observableArray([]);
         self.stats = ko.observable({
@@ -43,6 +44,10 @@
 
         // what is the current view? (excludes login view as that is implicit)
         self.view = ko.observable(PAGES.DASHBOARD);
+
+        // misc
+        self.showchangepassword = ko.observable(false);
+        self.showupdateaccount = ko.observable(false);
 
         // todo dry up with edit version
         self.authenticated = ko.computed(function() { return !!self.session(); }, this);
@@ -78,6 +83,24 @@
         self.cformlogin = function(form) {
             var data = $(form).serialize();
             auth(data, initSession);
+        };
+        self.cformchangepassword = function(form) {
+            var data = $(form).serialize();
+            if (!self.session()) return;
+            changePassword(self.student()._id(), self.session().token(), data, function(err) {
+                if (err) return self.err(err);
+                self.message('Changed password successfully');
+                self.showchangepassword(false);
+            });
+        };
+        self.cformupdateaccount = function(form) {
+            var data = $(form).serialize();
+            if (!self.session()) return;
+            updateAccount(self.student()._id(), self.session().token(), data, function(err) {
+                if (err) return self.err(err);
+                self.message('Updated account successfully');
+                self.showupdateaccount(false);
+            });
         };
         self.cstudent = function(user, e) {
             var token = self.session().token();
@@ -135,6 +158,14 @@
                 if (err) return console.error(err);
                 self.lessons(lessons);
             });
+        };
+        self.cshowupdateaccount = function() {
+            self.showupdateaccount(true);
+            $("#newpassword").focus();
+        };
+        self.cshowchangepassword = function() {
+            self.showchangepassword(true);
+            $("#newpassword").focus();
         };
         self.clogout = function() {
             clearSession();
