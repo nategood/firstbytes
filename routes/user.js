@@ -65,6 +65,20 @@ exports.projects = function(req, res) {
   });
 };
 
+// GET /user/ID/screenshots
+exports.screenshots = function(req, res) {
+  auth.getAndAssertUserFromRequest(req, false, function(err, user) {
+    if (err) return res.status(401).json({'error': err});
+    if (req.params.id != user._id && user.acl !== 1)  {
+      return res.status(401).json({'error': L.NOPE}); // allow admins
+    }
+    Screenshot.find({userId: req.params.id}, function(err, screenshots) {
+      if (err) return res.status(401).json({'error': err});
+      res.json(screenshots.map(function(p) { return p.toResponse(); } ));
+    });
+  });
+};
+
 // // GET /user/ID/projects/public/?page=N&start=M
 // exports.publicprojects = function(req, res){
 //   // todo

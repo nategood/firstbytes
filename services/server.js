@@ -122,10 +122,14 @@ app.get('/projects/examples/:keyword/', routes.project.searchPublicProjects);
 app.post('/user/auth/', routes.user.auth);
 app.post('/user/', routes.user.create);
 app.get('/user/:id/', routes.user.authFromToken);
+app.post('/user/:id/', routes.user.update);
+app.put('/user/:id/', routes.user.update);
+app.post('/user/:id/password/', routes.user.changePassword); // admin only for now
 app.get('/users/', routes.user.allStudents);
 app.get('/users/admins/', routes.user.allAdmins);
 
 app.get('/user/:id/projects/', routes.user.projects);
+app.get('/user/:id/screenshots/', routes.user.screenshots);
 // app.get('/user/:id/projects/public/', routes.user.publicprojects);
 
 app.get('/screenshot/:id/', routes.screenshots.get);

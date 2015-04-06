@@ -9,7 +9,8 @@
         DELETE_ERROR: 'Whoops! Looks like we were not able to delete this project.',
         GET_PROJECTS_ERROR: 'Uh oh. We were not able to fetch your projects. Make sure you are online.',
         GET_USER_ERROR: 'Uh oh. We were not able to locate that student. Make sure you are online.',
-        GET_ERROR: 'There was an error making a request'
+        GET_ERROR: 'There was an error making a request',
+        GET_SCREENSHOTS_ERROR: 'Uh oh. Could not locate your screenshots at the moment.'
     };
 
     // @param {string} user_id
@@ -142,7 +143,6 @@
         $.ajax(url, conf);
     };
 
-
     // @param {string} id project id to fetch
     // @param {string} token [optional] token to optionally authenticate with
     // @param {function} callback (string err, object project)
@@ -256,6 +256,25 @@
             },
             error: function(xhr) {
                 callback(L.GET_ERROR);
+            }
+        });
+    };
+
+    // @param {string} userId
+    // @param {string} token
+    // @param {function} callback (string err, object projects)
+    repo.fetchScreenshots = function(userId, token, callback) {
+        var url;
+        url = '/user/' + userId + '/screenshots/';
+        $.ajax(url, {
+            type: 'get',
+            dataType: 'json',
+            headers: {'token': token},
+            success: function(response, status, xhr) {
+                callback(null, response);
+            },
+            error: function(xhr) {
+                callback(L.GET_SCREENSHOTS_ERROR);
             }
         });
     };

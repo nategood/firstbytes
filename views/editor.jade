@@ -52,7 +52,7 @@ block content
     div#instructions.instructions(data-bind="visible: !!project().lesson() && lesson()")
         div
             h1(data-bind="text: lesson() && (lesson().name + ' Instructions')")
-            p(data-bind="html: lesson() && lesson().instructions")
+            p(data-bind="html: lesson() && marked(lesson().instructions)")
     //- div#chat.chat
     div#overlay.overlay(data-bind="visible: showmodal, click: chidemodal")
     div.overlay(data-bind="visible: showloading")
@@ -86,6 +86,13 @@ block content
             li(data-bind="click: $parent.cprojectselect")
                 img(style="width: 50px; height: 50px;", data-bind="attr: { src: screenshot.toString() !== '[object HTMLLIElement]' ? screenshot : '/img/notavailable.png' }")
                 span(data-bind="text: name")
+        div.clear
+        h1 Pics
+        ul.clickable(data-bind="foreach: screenshots")
+            //- todo replace with a nice framed page
+            li(data-bind="href: data", target="_blank")
+                img(style="width: 50px; height: 50px;", data-bind="attr: { src: data }")
+                //- span(data-bind="text: created")
         div.clear
     div#explorer.modal(data-bind="visible: showexplorer")
         h1 Explore Examples

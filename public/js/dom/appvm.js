@@ -23,6 +23,7 @@
         self.session = ko.observable(null);
         self.user = ko.observable(null);
         self.projects = ko.observableArray([]); // don't bother making these actual "Project" instances
+        self.screenshots = ko.observableArray([]);
         self.lessons = ko.observableArray([]);
         self.examples = ko.observableArray([]);
         self.username = ko.computed(function() {
@@ -84,6 +85,7 @@
             self.session(null);
             self.user(null);
             self.projects([]);
+            self.screenshots([]);
             clearProjectState();
         };
         clearProjectState = function() {
@@ -138,6 +140,10 @@
             // fire off a request async - ideally have a loading state
             repo.fetchAll(self.user()._id(), self.session().token(), function(err, projects) {
                 self.projects(projects);
+            });
+            // fire off a request async for pictures too
+            repo.fetchScreenshots(self.user()._id(), self.session().token(), function(err, screenshots) {
+                self.screenshots(screenshots);
             });
             self.showprojects(true);
         };

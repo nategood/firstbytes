@@ -16,6 +16,19 @@ var lessons = [
 "",
         category: 'Intro',
         sequence: 1,
+    },
+    {
+        name: '2. Patterns with Variables',
+        description: 'Become a code artist and use variables to help you draw cool pattern art',
+        instructions: "You will become a code artist and use variables to help you draw cool pattern art!\n\n 1. Notice that we have a variable called `size` being *assigned* in the beginning. Change it's value from 100 to something else. What does it do?\n 2. We are using 100 in a bunch of places to change where we draw the ellipses. Can you create a new variable, named `gap`, and use it instead of typing 100 in all over the place?\n 3. Using your new gap variable add 14 more ellipses for a total of 16 ellipses and arrange them in a cool pattern of four by four.\n 4. You are an artists now. Like all artists, you must sign your name. Use `text` to sign your name in the bottom right corner of your masterpiece.\n 4. Ready to out wit your friends? Change your background to white. Draw a black rectangle behind the dots that covers half the screen. Change your fill color for the ellipses `fill(30, 30, 30);`. Do the top circles look lighter than the bottom circles? Your eyes may think so, but the code you wrote shows the circles are the exact same color. Weird.",
+        source:
+"size = 100;\n" +
+"background(DARKRED);\n" +
+"fill(WHITE);\n" +
+"ellipse(100, 100, size, size);\n" +
+"ellipse(100 + 100, 100, size, size);\n",
+        category: 'Intro',
+        sequence: 2
     }
 ];
 
