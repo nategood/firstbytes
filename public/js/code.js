@@ -10,6 +10,9 @@ var Code = function() {
         return buildSrc(src);
     };
     buildSrc = function(src) {
+        // hacks for __mousePressed and __keyPressed
+        src = src.replace(/mouseIsPressed/g, '__mousePressed');
+        src = src.replace(/keyIsPressed/g, '__keyPressed');
         src = 'var FB = new Processing(canvas, function(FB){' +
             '_fb_init(FB, ' + size + ');' +
             'with(FB){' +

@@ -162,16 +162,54 @@ var Manual = {
                 $._("height: (Optional) the height of the box for text to auto wrap inside")
             ]
         },
+        // {
+        //     name: "textFont(font, size*)",
+        //     caption: "textFont(font, size*)",
+        //     value: "textFont(\"Helvetica\");",
+        //     type: "function",
+        //     exampleURL: "/cs/textfontfont-size/940030209",
+        //     description: $._("Using textFont() with createFont(), it's possible to change the font of text drawn."),
+        //     params: [
+        //         $._("font: A font returned by the createFont function"),
+        //         $._("size: (Optional) The size of the font, in pixels")
+        //     ]
+        // },
         {
-            name: "textFont(font, size*)",
-            caption: "textFont(font, size*)",
-            value: "textFont(\"Helvetica\");",
+            name: "textSize(font, size*)",
+            caption: "textSize(font, size*)",
+            value: "textSize(64);",
             type: "function",
-            exampleURL: "/cs/textfontfont-size/940030209",
-            description: $._("Using textFont() with createFont(), it's possible to change the font of text drawn."),
+            exampleURL: "/cs/textsizesize/937728198",
+            description: $._("Changes the size of text being drawn."),
             params: [
-                $._("font: A font returned by the createFont function"),
-                $._("size: (Optional) The size of the font, in pixels")
+                $._("size: The size of the text, in pixels")
+            ]
+        },
+        {
+            name: "random()",
+            exampleURL: "/cs/randomlow-high/827911487",
+            description: $._("Returns a random number between 0 and 1."),
+            params: [
+            ]
+        },
+        // {
+        //     name: "random(low, high)",
+        //     exampleURL: "/cs/randomlow-high/827911487",
+        //     description: $._("Returns a random number between low and high."),
+        //     params: [
+        //         $._("low: the lowest possible number returned"),
+        //         $._("high: the highest possible number returned")
+        //     ]
+        // },
+        {
+            name: "color(r, g, b, a*)",
+            exampleURL: "/cs/colorr-g-b/957020020",
+            description: $._("This function lets you store all three color components in a single variable. You can then pass that one variable to functions like background(), stroke(), and fill()."),
+            params: [
+                $._("r: amount of red, ranges from 0 to 255"),
+                $._("g: amount of green, ranges from 0 to 255"),
+                $._("b: amount of blue, ranges from 0 to 255"),
+                $._("a: (Optional) transparency, ranges from 0 to 255")
             ]
         }
     ]
@@ -367,18 +405,6 @@ var Manual = {
 //         params: [
 //             $._("x: the x-coordinate of the vertex"),
 //             $._("y: the y-coordinate of the vertex")
-//         ]
-//     },
-
-//     {
-//         name: "color(r, g, b, a*)",
-//         exampleURL: "/cs/colorr-g-b/957020020",
-//         description: $._("This function lets you store all three color components in a single variable. You can then pass that one variable to functions like background(), stroke(), and fill()."),
-//         params: [
-//             $._("r: amount of red, ranges from 0 to 255"),
-//             $._("g: amount of green, ranges from 0 to 255"),
-//             $._("b: amount of blue, ranges from 0 to 255"),
-//             $._("a: (Optional) transparency, ranges from 0 to 255")
 //         ]
 //     },
 
@@ -589,15 +615,6 @@ var Manual = {
 //         name: "noLoop()",
 //         exampleURL: "/cs/noloop/6342789906300928",
 //         description: $._("Stops the program from continuously executing the code within draw(). If loop() is called, the code in draw() begin to run continuously again.")
-//     },
-//     {
-//         name: "random(low, high)",
-//         exampleURL: "/cs/randomlow-high/827911487",
-//         description: $._("Returns a random number between low and high."),
-//         params: [
-//             $._("low: the lowest possible number returned"),
-//             $._("high: the highest possible number returned")
-//         ]
 //     },
 //     {
 //         name: "dist(x1, y1, x2, y2)",

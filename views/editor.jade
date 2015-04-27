@@ -202,33 +202,53 @@ block content
             <td>Y</td>
             <td>How far down to place the text?</td></tr>
             </table>
-        h3 Font and font size
+        //- h3 Font and font size
+        //- p.
+        //-     Change the font and font size that you are using. This command works similar to the paintbrush
+        //-     "fill" command in that it just sets up a change and may not immediately change something. Common
+        //-     supported font names are "Arial", "Helvetica", "Times", and "Courier".
+        //- p Example: Change your font to "Times" and make the font size to "20".
+        //- code.
+        //-     textFont('Times', 20);
+        //- p.
+        //-     The options (or <strong>parameters</strong>)
+        //-     <table>
+        //-     <tr><td>1</td>
+        //-     <td>Font Name</td>
+        //-     <td>What font should be used? ("Times", "Courier", "Arial", etc.)</td></tr>
+        //-     <tr><td>2</td>
+        //-     <td>Size</td>
+        //-     <td>What size should the font be (number)?</td></tr>
+        //-     <tr><td>3</td>
+        //-     <td>Y</td>
+        //-     <td>How far down to place the text?</td></tr>
+        //-     </table>
+        //- p Additional Example: Use "Times" font to write a large greeting in white
+        //- code
+        //-     pre.
+        //-         fill(WHITE);
+        //-         textFont('Times', 20);
+        //-         text('Hello!', 100, 100);
+        h3 Font size
         p.
-            Change the font and font size that you are using. This command works similar to the paintbrush
-            "fill" command in that it just sets up a change and may not immediately change something. Common
-            supported font names are "Arial", "Helvetica", "Times", and "Courier".
-        p Example: Change your font to "Times" and make the font size to "20".
+            Change the font size that you are using. This command works similar to the paintbrush
+            "fill" command in that it just sets up a change and may not immediately change something.
+        p Example: Change your font size to 64.
         code.
-            textFont('Times', 20);
+            textSize(64);
         p.
             The options (or <strong>parameters</strong>)
             <table>
             <tr><td>1</td>
-            <td>Font Name</td>
-            <td>What font should be used? ("Times", "Courier", "Arial", etc.)</td></tr>
-            <tr><td>2</td>
             <td>Size</td>
             <td>What size should the font be (number)?</td></tr>
-            <tr><td>3</td>
-            <td>Y</td>
-            <td>How far down to place the text?</td></tr>
             </table>
-        p Additional Example: Use "Times" font to write a large greeting in white
+        p Write the world Hello in size 20 text
         code
             pre.
                 fill(WHITE);
-                textFont('Times', 20);
-                text('Hello!', 100, 100);
+                textSize(20);
+                text("Hello!", 100, 100);
         h2 Colors
         h3 List of Basic Colors
         p Here is a list of named colors that the Editor supports
@@ -275,6 +295,37 @@ block content
         p Additional Example: Use your custom light blue color for the background
         code.
             background(color(200, 255, 255));
+        h3 If Conditional
+        p If statements are used to tell the computer to only do things at certain times.
+        p Example: Print the word "Small" if the variable num is less than 0.1.
+        code
+            pre.
+                if (num < 0.1) {
+                    text("Small", 100, 100);
+                }
+        p Additional Example: Draw a green circle if the variable c equals green or a blue if c is blue.
+        code
+            pre.
+                if (c === "green") {
+                    fill(GREEN);
+                }
+                if (c === "blue") {
+                    fill(BLUE);
+                }
+                ellipse(10, 10, 100, 100);
+        h3 Randomness
+        p Randomness is important for creating random elements of a game like rolling dice. You can ask the computer to generate a random number for you to use with random().
+        p Example: Create a random number between 0 and 1. Store the value in a variable called num.
+        code
+            pre.
+                num = random();
+        p Additional Example: Create a random number. Store it in a variable called num. If f is less than 0.1, then print the word small.
+        code
+            pre.
+                num = random();
+                if (num < 0.1) {
+                    text("Small", 100, 100);
+                }
         //- h2 User Input
         //- h3 Mouse Clicking
         //- h3 Mouse Movement
