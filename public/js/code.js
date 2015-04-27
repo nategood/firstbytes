@@ -11,8 +11,9 @@ var Code = function() {
     };
     buildSrc = function(src) {
         // hacks for __mousePressed and __keyPressed
-        src = src.replace(/mouseIsPressed/g, '__mousePressed');
-        src = src.replace(/keyIsPressed/g, '__keyPressed');
+        src = src.replace(/(\b)mouseIsPressed(\b)/g, '$1__mousePressed$2');
+        src = src.replace(/(\b)keyIsPressed(\b)/g, '$1__keyPressed$2');
+        src = src.replace(/(\b)key(\b)/g, '$1(key && key.toString())$2');
         src = 'var FB = new Processing(canvas, function(FB){' +
             '_fb_init(FB, ' + size + ');' +
             'with(FB){' +
